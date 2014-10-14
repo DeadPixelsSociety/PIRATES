@@ -1,0 +1,32 @@
+GROUPES
+=======
+
+Serveur :
+---------
+	Groupe 1 : 
+		* Nicolas DIOT
+		* Joris CHAVOT
+	
+	Groupe 2 :
+		* Romain MEKARNI
+		* Timothé JEANNOT
+	
+	Groupe 4 :
+		* Benoit CRIVELLI
+		* Jules WACQUIER
+
+	Groupe 5 :
+		* Vincent SOTO (Péru)
+		* Zhouyang LIU
+
+Client :
+--------
+	Groupe 1 :
+		* Lisa CORBAT
+		* Benjamin BERTHET
+		* Thomas BUSSIERE
+		* William HIVER
+	Groupe 2 :
+		* Sammy LOUDIYI
+		* Virgil MANRIQUE
+		* Quentin OBERSON
