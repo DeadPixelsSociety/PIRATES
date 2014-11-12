@@ -22,7 +22,26 @@
  * 
  */
 
-int main (int argc, char **argv)
+#include <Thread.hpp>
+#include <Mutex.hpp>
+
+// Inputs reception thread's function
+void receiveInputs(void)
 {
 	
+}
+
+int main (int argc, char **argv)
+{
+	// Create a thread to receive inputs from the server
+	sf::Thread reception(receiveInputs);
+	
+	// TODO Create a thread to display the game
+	sf::Thread display();
+	
+	// Create a mutex to communicate between reception & display
+	sf::Mutex inputsCommunication;
+	
+	reception.launch();
+	display.launch();
 }
