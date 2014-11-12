@@ -6,11 +6,11 @@
 //
 
 
-#include "CWorld.h"
+#include "CWorldBox.h"
 
 
 
-CWorld::CWorld() :
+CWorldBox::CWorldBox() :
 m_gravity(0.0f, -9.8f),
 m_world(gravity)
 {
@@ -23,14 +23,13 @@ m_world(gravity)
   m_PGroundBody->CreateFixture(&groundBox, 0.0f);
 }
 
-CWorld::~CWorld()
+CWorldBox::~CWorldBox()
 {
   
 }
 
-CWorld::AddDynBody()
+CWorldBox::update(sf::Time elapsed)
 {
-  b2BodyDef bodyDef;
   
 }
 

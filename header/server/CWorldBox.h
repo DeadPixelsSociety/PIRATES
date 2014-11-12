@@ -11,18 +11,21 @@
 
 
 #include "Box2D.h"
+#include "SFML.h"
 
 
-class CWorld
+class CWorldBox
 {
   public :
-    CWorld();
-    ~CWorld();
+    CWorldBox();
+    ~CWorldBox();
+    
+    void  update(sf::Time elapsed);
   
   private :
     b2Vec2    m_gravity;
     b2World   m_world;
-    b2Body    *m_pGroundBody;
+    b2Body*   m_pGroundBody;
 }
 
 

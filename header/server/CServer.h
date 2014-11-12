@@ -10,30 +10,32 @@
 #define _CSERVER_H
 
 
+#include "SFML.h"
 #include "CWorldMap.h"
-#include "CWorld.h"
+#include "CWorldBox.h"
 
 
 class CServer
 {
   public :
-          CServer();
+          CServer(int nbMaxPlayer);
           ~CServer();
-  	void  Initialize(int iNbMaxPlayer);
-  	void  LoopIn();
+          
+  	void  LoopSocket();
   	void  LoopGame();
-  	void  LoopOut();
+  	
   	
   private :
-    sf::Thread    m_threadLoopIn;
-    sf::Thread    m_threadLoopGame;
-    sf::Thread    m_threadLoopOut;
+    sf::Thread    m_threadLoopSocket; // Thread gérant la partie réseau
+    sf::Thread    m_threadLoopGame;   // Thread gérant la partie physique
   
-  	CWorldMap     m_pMap;
-  	CWorld        m_world;
+  	CWorldMap     m_worldMap; // Carte des élements dynamiques et de leurs états
+  	CWorldBox     m_worldBox; // Univers physique Box2D
   	
   	sf::Clock     m_clock;
-  	sf::UdpSocket m_socket;
+  	
+  	std::list<sf::UdpSocket*> m_lSocket;
+  	sf::SocketSelector        m_socketSelector;
 };
 
 #endif  //_CSERVER_H
