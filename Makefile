@@ -21,7 +21,7 @@
 # 
 
 CC=g++
-CPPFLAGS=-Wall -std
+CPPFLAGS=-Wall -std=c++11
 SFML= -lsfml-graphics -lsfml-window -lsfml-system
 BOX2D=
 
@@ -39,7 +39,7 @@ CLIENT=client
 
 # Insérer ici la liste des fichiers à compiler sans extension
 SRV=server
-CLT=client
+CLT=client CClient
 CMN=
 
 SRVOBJ=${addsuffix .o, ${SRV}}
@@ -65,15 +65,15 @@ ${CLIENT}: ${CLTOBJ} ${CMNOBJ}
 
 ${DIR_SRC}${DIR_SRV}%.o: ${DIR_SRC}${DIR_SRV}%.cpp
 	@echo "** Building $@ **"
-	${CC} -c ${CPPFLAGS} -o $@ $<
+	${CC} -c ${CPPFLAGS} -o $@ $< -I ${DIR_HEADER}${DIR_SRV} -I ${DIR_HEADER}${DIR_CMN}
 	
 ${DIR_SRC}${DIR_CLT}%.o: ${DIR_SRC}${DIR_CLT}%.cpp
 	@echo "** Building $@ **"
-	${CC} -c ${CPPFLAGS} -o $@ $<
+	${CC} -c ${CPPFLAGS} -o $@ $< -I ${DIR_HEADER}${DIR_CLT} -I ${DIR_HEADER}${DIR_CMN}
 	
 ${DIR_SRC}${DIR_CMN}%.o: ${DIR_SRC}${DIR_CMN}%.cpp
 	@echo "** Building $@ **"
-	${CC} -c ${CPPFLAGS} -o $@ $<
+	${CC} -c ${CPPFLAGS} -o $@ $< -I ${DIR_HEADER}${DIR_CMN}
 
 clean:
 	@echo "** Removing object files and executable... **"

@@ -1,5 +1,5 @@
 /*
- * CClient.h
+ * CMap.h
  * 
  * Copyright 2014 PIRATES
  * http://dps.univ-fcomte.fr/projects/pirates.html
@@ -22,32 +22,23 @@
  * 
  */
  
-#ifndef __CCLIENT_H
-#define __CCLIENT_H
+#ifndef __CMAP_H
+#define __CMAP_H
 
 
-class CClient {
+class CMap {
 	public:	
-		explicit       		CClient (int windowWidth, int windowHeight, sf::String name);
-		explicit       		CClient (void);
-		virtual        		~CClient (void);
-		void 				initialize ();
-		void 				run	();
+		explicit       		CMap (void);
+		virtual        		~CMap (void);
+		void				render (sf::RenderWindow& window);
+
 
 	private:
-		void				processEvents ();
-		void				update ();
-		void				render ();
-		void				sendData ();
+		sf::Texture 		tMapEau;
+		sf::Sprite 			spMapEau;
 		
-		sf::RenderWindow			m_window;
-		CClientPirate				m_player;
-		CMap						m_map;
-		std::array<bool, 4>			m_inputs;
-		sf::UdpSocket 				m_socket;
-		sf::IpAddress 				m_serverIp 	= "127.0.0.1";
-		sf::Packet 					m_packet;
-		int							m_port 		= 56747;
+		sf::Texture 		tMapSable;
+		sf::Sprite 			spMapSable;
 };
 
-#endif  //__CCLIENT_H
+#endif  //__CMAP_H

@@ -10,9 +10,9 @@
 #define _SFML_H
 
 
-#include <SFML/SFML.h>
-#include <SFML/UdpSocket.h>
-#include <SFML/Packet.h>
+#include <SFML/System.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/Network.hpp>
 
 
 #endif // _SFML_H
