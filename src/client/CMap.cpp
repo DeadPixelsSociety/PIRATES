@@ -1,5 +1,5 @@
 /*
- * client.cpp
+ * CMap.cpp
  * 
  * Copyright 2014 PIRATES
  * http://dps.univ-fcomte.fr/projects/pirates.html
@@ -24,14 +24,36 @@
  
 #include "header.h"
 
-int main (int argc, char **argv)
+CMap::CMap ()
 {
-	const int windowHeight = 700;
-	const int windowWidth = 1000;
+	if(!tMapEau.loadFromFile("../../asset/image/eau.jpg"))
+	{
+		//Affichage du message d'erreur et passage a la ligne
+		std::cout<<"Erreur"<< std::endl;
+		exit(1);
+	}
+	spMapEau.setTexture(tMapEau);
+	spMapEau.setPosition(0,0);
+	spMapEau.setScale(3.3f, 3.3f);	
 	
-	CClient* game = new CClient(windowWidth, windowHeight, "PIRATES !!");
-	game->initialize();
-	game->run();	
-	
-	delete game;
+	if(!tMapSable.loadFromFile("../../asset/image/sable.jpg"))
+	{
+		//Affichage du message d'erreur et passage a la ligne
+		std::cout<<"Erreur"<< std::endl;
+		exit(1);
+	}
+	spMapSable.setTexture(tMapSable);
+	spMapSable.setScale(1.5f, 1.5f);
+	spMapSable.setPosition(50,50);
+}
+
+CMap::~CMap(void)
+{
+
+};
+
+void CMap::render (sf::RenderWindow& window)
+{
+	window.draw(spMapEau);
+	window.draw(spMapSable);
 }

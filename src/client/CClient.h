@@ -1,5 +1,5 @@
 /*
- * client.cpp
+ * CClient.h
  * 
  * Copyright 2014 PIRATES
  * http://dps.univ-fcomte.fr/projects/pirates.html
@@ -22,16 +22,32 @@
  * 
  */
  
-#include "header.h"
+#ifndef __CCLIENT_H
+#define __CCLIENT_H
 
-int main (int argc, char **argv)
-{
-	const int windowHeight = 700;
-	const int windowWidth = 1000;
-	
-	CClient* game = new CClient(windowWidth, windowHeight, "PIRATES !!");
-	game->initialize();
-	game->run();	
-	
-	delete game;
-}
+
+class CClient {
+	public:	
+		explicit       		CClient (int windowWidth, int windowHeight, sf::String name);
+		explicit       		CClient (void);
+		virtual        		~CClient (void);
+		void 				initialize ();
+		void 				run	();
+
+	private:
+		void				processEvents ();
+		void				update ();
+		void				render ();
+		void				sendData ();
+		
+		sf::RenderWindow			m_window;
+		CClientPirate				m_player;
+		CMap						m_map;
+		std::array<bool, 4>			m_inputs;
+		sf::UdpSocket 				m_socket;
+		sf::IpAddress 				m_serverIp 	= "127.0.0.1";
+		sf::Packet 					m_packet;
+		int							m_port 		= 56747;
+};
+
+#endif  //__CCLIENT_H

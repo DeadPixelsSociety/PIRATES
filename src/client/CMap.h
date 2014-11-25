@@ -1,5 +1,5 @@
 /*
- * client.cpp
+ * CMap.h
  * 
  * Copyright 2014 PIRATES
  * http://dps.univ-fcomte.fr/projects/pirates.html
@@ -22,16 +22,23 @@
  * 
  */
  
-#include "header.h"
+#ifndef __CMAP_H
+#define __CMAP_H
 
-int main (int argc, char **argv)
-{
-	const int windowHeight = 700;
-	const int windowWidth = 1000;
-	
-	CClient* game = new CClient(windowWidth, windowHeight, "PIRATES !!");
-	game->initialize();
-	game->run();	
-	
-	delete game;
-}
+
+class CMap {
+	public:	
+		explicit       		CMap (void);
+		virtual        		~CMap (void);
+		void				render (sf::RenderWindow& window);
+
+
+	private:
+		sf::Texture 		tMapEau;
+		sf::Sprite 			spMapEau;
+		
+		sf::Texture 		tMapSable;
+		sf::Sprite 			spMapSable;
+};
+
+#endif  //__CMAP_H

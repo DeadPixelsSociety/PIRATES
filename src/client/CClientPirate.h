@@ -1,5 +1,6 @@
+
 /*
- * client.cpp
+ * CClientPirate.h
  * 
  * Copyright 2014 PIRATES
  * http://dps.univ-fcomte.fr/projects/pirates.html
@@ -22,16 +23,22 @@
  * 
  */
  
-#include "header.h"
+#ifndef __CCLIENTPIRATE_H
+#define __CCLIENTPIRATE_H
 
-int main (int argc, char **argv)
-{
-	const int windowHeight = 700;
-	const int windowWidth = 1000;
-	
-	CClient* game = new CClient(windowWidth, windowHeight, "PIRATES !!");
-	game->initialize();
-	game->run();	
-	
-	delete game;
-}
+
+class CClientPirate {
+	public:	
+		explicit       		CClientPirate (void);
+		explicit       		CClientPirate (float x, float y);
+		virtual        		~CClientPirate (void);
+
+		void				update (float x, float y);
+		void				render (sf::RenderWindow& window);
+
+	private:
+		sf::Texture 		tPirate;
+		sf::Sprite 			spPirate;
+};
+
+#endif  //__CCLIENTPIRATE_H

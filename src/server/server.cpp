@@ -23,12 +23,11 @@
  */
 
 
-#include "CServer.h"
+#include "header.h"
 
 
 int main (int argc, char **argv)
 {
-  CServer server(2);
-  
+	
 	return 0;
 }

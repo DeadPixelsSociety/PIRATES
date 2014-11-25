@@ -1,5 +1,5 @@
 /*
- * client.cpp
+ * CClientPirate.cpp
  * 
  * Copyright 2014 PIRATES
  * http://dps.univ-fcomte.fr/projects/pirates.html
@@ -24,14 +24,34 @@
  
 #include "header.h"
 
-int main (int argc, char **argv)
+CClientPirate::CClientPirate (float x, float y)
 {
-	const int windowHeight = 700;
-	const int windowWidth = 1000;
-	
-	CClient* game = new CClient(windowWidth, windowHeight, "PIRATES !!");
-	game->initialize();
-	game->run();	
-	
-	delete game;
+	if(!tPirate.loadFromFile("../../asset/image/violet.png"))
+	{
+		//Affichage du message d'erreur et passage a la ligne
+		std::cout<<"Erreur"<< std::endl;
+		exit(1);
+	}
+	spPirate.setTexture(tPirate);
+	spPirate.setPosition(x, y);
+}
+
+CClientPirate::CClientPirate (void)
+{
+	CClientPirate(10.0, 10.0);
+}
+
+CClientPirate::~CClientPirate(void)
+{
+
+};
+
+void CClientPirate::update (float x, float y)
+{
+	spPirate.setPosition(x, y);
+}
+
+void CClientPirate::render (sf::RenderWindow& window)
+{
+	window.draw(spPirate);
 }
