@@ -11,6 +11,8 @@
 
 
 #include <SFML/SFML.h>
+#include <SFML/UdpSocket.h>
+#include <SFML/Packet.h>
 
 
 #endif // _SFML_H

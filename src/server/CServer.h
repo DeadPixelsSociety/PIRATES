@@ -22,27 +22,38 @@
  * 
  */
  
-#ifndef __CCLIENT_H
-#define __CCLIENT_H
+#ifndef _CSERVER_H
+#define _CSERVER_H
 
 
-class CServer {
-	public:	
-		explicit       		CServer (void);
-		virtual        		~CServer (void);
-		void 				initialize ();
-		void 				run	();
+#include "SFML.h"
+#include "CWorldMap.h"
+#include "CWorldBox.h"
 
-	private:
-		void				update ();
-		void				sendData ();
-		void				receivedData ();
-		
-		std::array<bool, 4>			m_inputs;
-		sf::UdpSocket 				m_socket;
-		sf::IpAddress 				m_serverIp 	= "127.0.0.1";
-		sf::Packet 					m_packet;
-		int							m_port 		= 56747;
+
+class CServer
+{
+  public :
+          CServer(int nbMaxPlayer);
+          ~CServer();
+          
+  	void  LoopSocket();
+  	void  LoopGame();
+  	
+  	
+  private :
+    sf::Thread    m_threadLoopSocket; // Thread gérant la partie réseau
+    sf::Thread    m_threadLoopGame;   // Thread gérant la partie physique
+  
+  	CWorldMap     m_worldMap; // Carte des élements dynamiques et de leurs états
+  	CWorldBox     m_worldBox; // Univers physique Box2D
+  	
+  	sf::Clock     m_clock;
+  	
+  	std::list<sf::UdpSocket*> m_lSocket;
+  	sf::SocketSelector        m_socketSelector;
+  	
+  	bool  m_running;
 };
 
-#endif  //__CCLIENT_H
+#endif  //_CSERVER_H

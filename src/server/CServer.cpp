@@ -1,93 +1,86 @@
-/*
- * CClient.cpp
- * 
- * Copyright 2014 PIRATES
- * http://dps.univ-fcomte.fr/projects/pirates.html
- * 
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- * MA 02110-1301, USA.
- * 
- * 
- */
- 
-#include "header.h"
+#include "CServer.h"
 
-CServer::CServer()
-{
-};
 
-CServer::~CServer(void)
+CServer::CServer(int iNbMaxPlayer) :
+m_clock(),
+m_threadLoopSocket(&CServer::LoopSocket),
+m_threadLoopGame(&CServer::LoopGame),
+m_worldMap(),
+m_worldBox(),
+m_lSocket(),
+m_socketSelector(),
+m_running(true)
 {
-	
-};
+  // Ouverture et mise en écoute des nbMaxPlayer Sockets permettant au serveur
+  // de recevoir les données des clients
+  for (int i = 0; i < nbMaxPlayer; i++)
+  {
+    m_lSocket.push_back(new sf::UdpSocket());
+    m_lSocket.back()->bind(54000);
+    m_socketSelector.add(m_lSocket.back());
+  }
 
-void CServer::initialize() 
-{
-	//Init map
-	//init player
-	
-	//Init network
-	if (m_socket.bind(m_port) != sf::Socket::Done)
-	{
-		std::cout << "Erreur de création du socket" << std::endl;
-		std::exit(1);
-	}
+  // Lancement des deux threads en parallèles
+  m_threadLoopSocket.launch();
+  m_threadLoopGame.launch();
 }
 
-void CServer::run() 
+CServer::~CServer()
 {
-	//Put that shit on a thread
-	receivedData();
-		
-		
-	update();
-		
-	//Put that shit on a thread
-	sendData();
+  m_running(false);
+  
+  for (std::list<sf::UdpSocket*>::iterator it = m_lSocket.begin(); it < m_lSocket.end(); it++)
+    delete *it;
 }
 
-void CServer::update() 
+void  CServer::LoopSocket()
 {
-	std::cout << "right"  	<< m_inputs[0] << std::endl;
-	std::cout << "left"  	<< m_inputs[1] << std::endl;
-	std::cout << "up" 		<< m_inputs[2] << std::endl;
-	std::cout << "down" 	<< m_inputs[3] << std::endl;
+  sf::Packet  packet;
+  std::string sPacketData;
+  
+  while (m_running)
+  {
+    if (m_socketSelector.wait())
+    {
+      // Boucle permet de lire toutes les sockets prêtes à recevoir
+      // Cette boucle ne s'exécute que si au moins une des sockets est prête
+      for (std::list<sf::UdpSocket*>::iterator it = m_lSocket.begin(); it < m_lSocket.end(); it++)
+      {
+        if (m_socketSelector.isReady(*it))
+        {
+          if (*it.receive(packet) == sf::Socket::Done)
+          {
+            packet >> sPacketData;
+            switch (*sPacketData)
+            {
+              case UPDATE :
+                m_worldMap.update(sPacketData);
+                break;
+              case NEW :
+                m_worldMap.addPlayer(sPacketData + 1, 0, 0);
+                break;
+              case QUIT :
+                m_worldMap.removePlayer(sPacketData + 1);
+                break;
+              default :
+                break;
+            }
+          }
+        }
+      }
+    }
+    sf::sleep(sf::milliseconds(10));
+  }
 }
 
-void CServer::sendData() 
+void  CServer::LoopGame()
 {
-	for(int nInput = 0; nInput < 4; ++nInput)
-	{
-		m_packet << m_inputs[nInput];
-	}
-	
-	if (m_socket.send(m_packet, m_serverIp, m_port) != sf::Socket::Done)
-	{
-		// error...
-	}
+  while (m_running)
+  {
+    sf::Time elapsed = clock.restart();
+    m_worldBox.update(elapsed);
+  
+    sf::sleep(sf::milliseconds(10));
+  }
 }
 
-void CServer::receivedData() 
-{
-	for(int nInput = 0; nInput < 4; ++nInput)
-	{
-		m_packet << m_inputs[nInput];
-	}
-	
-	if (m_socket.send(m_packet, m_serverIp, m_port) != sf::Socket::Done)
-	{
-		// error...
-	}
-}

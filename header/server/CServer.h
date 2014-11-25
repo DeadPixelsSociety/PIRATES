@@ -36,6 +36,8 @@ class CServer
   	
   	std::list<sf::UdpSocket*> m_lSocket;
   	sf::SocketSelector        m_socketSelector;
+  	
+  	bool  m_running;
 };
 
 #endif  //_CSERVER_H
