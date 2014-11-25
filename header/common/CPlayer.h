@@ -16,11 +16,17 @@
 class CPlayer
 {
   public :
-    CPlayer();
+    CPlayer(std::string name, int x, int y);
     ~CPlayer();
     
+    inline  void  setName(std::string in)   {m_sName = in;}
+    inline  void  setPosition(int x, int y) {m_vPosition.x = x; m_vPosition.y = y;}
+    
+    inline  std::string       getName()     {return m_sName;}
+    inline  sf::Vector2<int>  getPosition() {return m_vPosition;}
+    
   private :
-    string            m_sName;
+    std::string       m_sName;
     sf::Vector2<int>  m_vPosition;
 }
 

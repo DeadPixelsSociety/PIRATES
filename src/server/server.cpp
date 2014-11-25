@@ -23,7 +23,7 @@
  */
 
 
-#include "header.h"
+#include "CServer.h"
 
 
 int main (int argc, char **argv)

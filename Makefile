@@ -21,7 +21,7 @@
 # 
 
 CC=g++
-CPPFLAGS=-Wall -Wextra -pedantic -Wcast-qual -Wcast-align -O2 -s
+CPPFLAGS=-Wall -std
 SFML= -lsfml-graphics -lsfml-window -lsfml-system
 BOX2D=
 
@@ -36,10 +36,12 @@ DIR_CMN=common/
 # Files
 SERVER=server
 CLIENT=client
+
 # Insérer ici la liste des fichiers à compiler sans extension
 SRV=server
 CLT=client
 CMN=
+
 SRVOBJ=${addsuffix .o, ${SRV}}
 # l'affectation ":=" indique à make de créer la variable avant d'y accéder
 # En fait make ne créé les variables qu'à leur utilisation dans le code
@@ -61,12 +63,15 @@ ${CLIENT}: ${CLTOBJ} ${CMNOBJ}
 	@echo "** Making ${DIR_BIN}${DIR_CLT}${CLIENT} **"
 	${CC} -o ${DIR_BIN}${DIR_CLT}${CLIENT} $^ ${SFML}
 
-# Cette règle implique que chaque fichier .cpp possède son .hpp correspondant, sinon il sera ignoré
-# Par contre l'avantage est que si un fichier hpp est modifié, le fichier cpp sera recompilé
-# Cette règle permet aussi de ne recompiler que les fichiers qui ont été modifiés (gros gain de temps !)
-# Il faut corriger cette règle car elle ne prend pas en compte les dossiers (genre src/server/server.cpp)
-# Je (Romain) m'en occupe il faut juste que je retrouve la syntaxe exacte (je l'ai noté quelque part et j'avais mis plusieurs heures à la trouver... à l'époque...)
-%.o: %.cpp %.hpp
+${DIR_SRC}${DIR_SRV}%.o: ${DIR_SRC}${DIR_SRV}%.cpp
+	@echo "** Building $@ **"
+	${CC} -c ${CPPFLAGS} -o $@ $<
+	
+${DIR_SRC}${DIR_CLT}%.o: ${DIR_SRC}${DIR_CLT}%.cpp
+	@echo "** Building $@ **"
+	${CC} -c ${CPPFLAGS} -o $@ $<
+	
+${DIR_SRC}${DIR_CMN}%.o: ${DIR_SRC}${DIR_CMN}%.cpp
 	@echo "** Building $@ **"
 	${CC} -c ${CPPFLAGS} -o $@ $<
 

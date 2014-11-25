@@ -9,9 +9,9 @@
 #include "CPlayer.h"
 
 
-CPlayer::CPlayer() :
-m_sName("Player"),
-m_vPosition(1, 1)
+CPlayer::CPlayer(std::string name, int x, int y) :
+m_sName(name),
+m_vPosition(x, y)
 {
   
 }

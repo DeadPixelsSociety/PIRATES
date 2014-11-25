@@ -1,3 +1,11 @@
+//
+//  @ Project :   PIRATES
+//  @ File Name : CServer.cpp
+//  @ Date :      20/10/2014
+//  @ Author :    ROmain
+//
+
+
 #include "CServer.h"
 
 
