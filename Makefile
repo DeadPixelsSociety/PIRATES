@@ -21,7 +21,7 @@
 # 
 
 CC=g++
-CPPFLAGS=-Wall -std
+CPPFLAGS=-Wall -std=c++11
 SFML= -lsfml-graphics -lsfml-window -lsfml-system
 BOX2D=
 
