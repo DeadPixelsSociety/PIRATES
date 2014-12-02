@@ -29,9 +29,7 @@ int main (int argc, char **argv)
 	const int windowHeight = 700;
 	const int windowWidth = 1000;
 	
-	CClient* game = new CClient(windowWidth, windowHeight, "PIRATES !!");
+	CClient* gameCClient(windowWidth, windowHeight, "PIRATES !!");
 	game->initialize();
-	game->run();	
-	
-	delete game;
+	game->run();
 }
