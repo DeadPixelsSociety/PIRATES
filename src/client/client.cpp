@@ -30,7 +30,6 @@ int main (int argc, char **argv)
 	const int windowWidth = 1000;
 	
 	CClient* gameCClient(windowWidth, windowHeight, "PIRATES !!");
-	game->initialize();
 	
 	// Create 2 threads
 	

@@ -30,6 +30,7 @@ CClient::CClient(int windowWidth, int windowHeight, sf::String name)
 , m_map()
 {
 	m_window.setFramerateLimit(60);
+	initialize();
 };
 
 CClient::~CClient(void)
@@ -50,6 +51,7 @@ void CClient::initialize()
 	}
 	
 	// Lock the network communication thread
+	m_networkThread = new sf::Thread(sendData);
 	m_serverCommunication.lock();
 }
 
@@ -69,6 +71,7 @@ void CClient::run()
 void CClient::exitGame()
 {
 	// TODO fermer les sockets, les threads et tout le bazar
+	delete m_networkThread;
 }
 
 void CClient::processEvents() 

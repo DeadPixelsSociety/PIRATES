@@ -48,7 +48,7 @@ class CClient {
 		sf::UdpSocket 				m_socket;
 		sf::IpAddress 				m_serverIp 	= "127.0.0.1";
 		sf::Packet 					m_packet;
-		sf::Thread					m_networkThread(sendData);
+		sf::Thread					m_networkThread;
 		sf::Mutex					m_serverCommunication;	/* Define communication between network & render threads */
 		int							m_port 		= 56747;
 };
