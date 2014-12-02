@@ -34,20 +34,23 @@ CClient::CClient(int windowWidth, int windowHeight, sf::String name)
 
 CClient::~CClient(void)
 {
-	
+	exitGame();
 };
 
 void CClient::initialize() 
 {
-	//Init map
-	//init player
+	// Init map
+	// Init player
 	
-	//Init network
+	// Init network
 	if (m_socket.bind(m_port) != sf::Socket::Done)
 	{
 		std::cout << "Erreur de création du socket" << std::endl;
 		std::exit(1);
 	}
+	
+	// Lock the network communication thread
+	m_serverCommunication.lock();
 }
 
 void CClient::run() 
@@ -58,9 +61,14 @@ void CClient::run()
 		update();
 		render();
 		
-		//Put that shit on a thread
-		sendData();
+		// Allow the network thread to send an update
+		m_serverCommunication.unlock();
 	}
+}
+
+void CClient::exitGame()
+{
+	// TODO fermer les sockets, les threads et tout le bazar
 }
 
 void CClient::processEvents() 
@@ -143,9 +151,17 @@ void CClient::sendData()
 		m_packet << m_inputs[nInput];
 	}
 	
-	if (m_socket.send(m_packet, m_serverIp, m_port) != sf::Socket::Done)
+	m_socket::Status request = m_socket.send(m_packet, m_serverIp, m_port);
+	
+	if (request == m_socket::Status::Error)
 	{
-		// error...
+		cerr << "An error occurred during the communication with the server." << endl;
+		exitGame();
+	}
+	else if	(request == m_socket::Status::Disconnected)
+	{
+		cerr << "You have been disconnected from the host." << endl;
+		exitGame();
 	}
 }
 
