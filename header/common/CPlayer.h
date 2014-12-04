@@ -28,7 +28,7 @@ class CPlayer
   private :
     std::string       m_sName;
     sf::Vector2<int>  m_vPosition;
-}
+};
 
 
 #endif

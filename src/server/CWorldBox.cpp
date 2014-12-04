@@ -12,15 +12,16 @@
 
 CWorldBox::CWorldBox() :
 m_gravity(0.0f, -9.8f),
-m_world(gravity)
+m_world(m_gravity)
 {
   b2BodyDef       groundBodyDef;
   b2PolygonShape  groundBox;
   
+  
   groundBodyDef.position.Set(0.0f, -9.8f);
   m_pGroundBody = m_world.CreateBody(&groundBodyDef);
   groundBox.SetAsBox(100.0f, 100.0f);   // Half-width and Half-height
-  m_PGroundBody->CreateFixture(&groundBox, 0.0f);
+  m_pGroundBody->CreateFixture(&groundBox, 0.0f);
 }
 
 CWorldBox::~CWorldBox()
@@ -28,7 +29,7 @@ CWorldBox::~CWorldBox()
   
 }
 
-CWorldBox::update(sf::Time elapsed)
+void  CWorldBox::update(sf::Time elapsed)
 {
   
 }

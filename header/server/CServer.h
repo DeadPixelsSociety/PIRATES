@@ -11,6 +11,7 @@
 
 
 #include "SFML.h"
+#include <list>
 #include "CWorldMap.h"
 #include "CWorldBox.h"
 

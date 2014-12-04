@@ -26,7 +26,7 @@ class CWorldBox
     b2Vec2    m_gravity;
     b2World   m_world;
     b2Body*   m_pGroundBody;
-}
+};
 
 
 

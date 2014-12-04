@@ -10,7 +10,10 @@
 #define _CWORLDMAP_H
 
 
-#include "string.h"
+#include <string>
+#include <list>
+
+#include "CPlayer.h"
 
 
 class CWorldMap

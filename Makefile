@@ -22,8 +22,8 @@
 
 CC=g++
 CPPFLAGS=-Wall -std=c++11
-SFML= -lsfml-graphics -lsfml-window -lsfml-system
-BOX2D=
+SFML= -lsfml-network -lsfml-graphics -lsfml-window -lsfml-system
+BOX2D= -lbox2d
 
 # Folders
 DIR_BIN=bin/
@@ -38,9 +38,9 @@ SERVER=server
 CLIENT=client
 
 # Insérer ici la liste des fichiers à compiler sans extension
-SRV=server
-CLT=client CClient
-CMN=
+SRV=server CServer CWorldBox
+CLT=client CClient CClientPirate CMap
+CMN=CWorldMap CPlayer
 
 SRVOBJ=${addsuffix .o, ${SRV}}
 # l'affectation ":=" indique à make de créer la variable avant d'y accéder
