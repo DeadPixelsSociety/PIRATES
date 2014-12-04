@@ -1,5 +1,6 @@
+
 /*
- * CClient.h
+ * CClientPirate.h
  * 
  * Copyright 2014 PIRATES
  * http://dps.univ-fcomte.fr/projects/pirates.html
@@ -22,35 +23,22 @@
  * 
  */
  
-#ifndef __CCLIENT_H
-#define __CCLIENT_H
+#ifndef __CCLIENTPIRATE_H
+#define __CCLIENTPIRATE_H
 
 
-class CClient {
+class CClientPirate {
 	public:	
-		explicit       		CClient (int windowWidth, int windowHeight, sf::String name);
-		explicit       		CClient (void);
-		virtual        		~CClient (void);
-		void 				initialize ();
-		void 				run	();
-		void				exitGame (); /* Called before exiting the game */
+		explicit       		CClientPirate (void);
+		explicit       		CClientPirate (float x, float y);
+		virtual        		~CClientPirate (void);
+
+		void				update (float x, float y);
+		void				render (sf::RenderWindow& window);
 
 	private:
-		void				processEvents ();
-		void				update ();
-		void				render ();
-		void				sendData ();
-		
-		sf::RenderWindow			m_window;
-		CClientPirate				m_player;
-		CMap						m_map;
-		std::array<bool, 4>			m_inputs;
-		sf::UdpSocket 				m_socket;
-		sf::IpAddress 				m_serverIp 	= "127.0.0.1";
-		sf::Packet 					m_packet;
-		sf::Thread					m_networkThread;
-		sf::Mutex					m_serverCommunication;	/* Define communication between network & render threads */
-		int							m_port 		= 56747;
+		sf::Texture 		tPirate;
+		sf::Sprite 			spPirate;
 };
 
-#endif  //__CCLIENT_H
+#endif  //__CCLIENTPIRATE_H
