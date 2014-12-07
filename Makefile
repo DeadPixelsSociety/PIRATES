@@ -42,7 +42,7 @@ CLIENT=client
 SRV=server CServer CWorldBox
 CLT=client CClient CClientPirate CMap
 CMN=CWorldMap CPlayer
-
+ 
 SRVOBJ=${addsuffix .o, ${SRV}}
 SRVOBJ:=$(addprefix ${DIR_SRC}${DIR_SRV}, ${SRVOBJ})
 CLTOBJ=$(addsuffix .o, ${CLT})
