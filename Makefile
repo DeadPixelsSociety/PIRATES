@@ -23,7 +23,7 @@
 CC=g++
 CPPFLAGS=-Wall -std=c++11
 SFML= -lsfml-network -lsfml-graphics -lsfml-window -lsfml-system
-BOX2D= -lbox2d
+BOX2D= libBox2D.a libBox2D.so
 
 # Folders
 DIR_BIN=bin/
@@ -32,26 +32,24 @@ DIR_SRC=src/
 DIR_SRV=server/
 DIR_CLT=client/
 DIR_CMN=common/
+DIR_LIB=lib/
 
-# Files
+# Files output
 SERVER=server
 CLIENT=client
 
-# Insérer ici la liste des fichiers à compiler sans extension
+# Inserer ici la liste des fichiers a compiler sans extension
 SRV=server CServer CWorldBox
 CLT=client CClient CClientPirate CMap
 CMN=CWorldMap CPlayer
 
 SRVOBJ=${addsuffix .o, ${SRV}}
-# l'affectation ":=" indique à make de créer la variable avant d'y accéder
-# En fait make ne créé les variables qu'à leur utilisation dans le code
-# Il refuse donc de créer une variable qui dépend d'elle-même puisqu'elle n'a pas été créée
-# Donc avec ":=" on force make à créer la variable, avant de la rédéfinir à partir d'elle-même
 SRVOBJ:=$(addprefix ${DIR_SRC}${DIR_SRV}, ${SRVOBJ})
 CLTOBJ=$(addsuffix .o, ${CLT})
 CLTOBJ:=$(addprefix ${DIR_SRC}${DIR_CLT}, ${CLTOBJ})
 CMNOBJ=$(addsuffix .o, ${CMN})
 CMNOBJ:=$(addprefix ${DIR_SRC}${DIR_CMN}, ${CMNOBJ})
+BOX2D:=${addprefix ${DIR_LIB}, ${BOX2D}}
 
 all: ${SERVER} ${CLIENT}
 
