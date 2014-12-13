@@ -2,7 +2,7 @@
 //  @ Project : PIRATES
 //  @ File Name : CServer.h
 //  @ Date : 20/10/2014
-//  @ Author : 
+//  @ Author :
 //
 
 
@@ -10,10 +10,10 @@
 #define _CSERVER_H
 
 
-#include "SFML.h"
+#include <common/SFML.h>
 #include <list>
-#include "CWorldMap.h"
-#include "CWorldBox.h"
+#include <common/CWorldMap.h>
+#include <worldBox/CWorldBox.h>
 
 
 class CServer
@@ -21,23 +21,23 @@ class CServer
   public :
           CServer(int nbMaxPlayer);
           ~CServer();
-          
+
   	void  LoopSocket();
   	void  LoopGame();
-  	
-  	
+
+
   private :
     sf::Thread    m_threadLoopSocket; // Thread gérant la partie réseau
     sf::Thread    m_threadLoopGame;   // Thread gérant la partie physique
-  
+
   	CWorldMap     m_worldMap; // Carte des élements dynamiques et de leurs états
   	CWorldBox     m_worldBox; // Univers physique Box2D
-  	
+
   	sf::Clock     m_clock;
-  	
+
   	std::list<sf::UdpSocket*> m_lSocket;
   	sf::SocketSelector        m_socketSelector;
-  	
+
   	bool  m_running;
 };
 

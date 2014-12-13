@@ -6,6 +6,39 @@ In that way, a lot of competitors are fighting to be the first pirate of the yea
 
 To win, you have to be the first to get all the treasures and come back to your ship.
 
+Developper install
+------------------
+
+1. clone the PIRATES repository :
+    git clone http://github.com/DeadPixelsSociety/PIRATES.git
+
+2. Install SFML packages from your OS (apt-get, pacman, or download from http://www.sfml-dev.org)
+
+3. Install Box2D library :
+    - Download the archive (outside the git folder) :
+        wget http://box2d.googlecode.com/files/Box2D_v2.3.0.7z
+    - Extract with 7z :
+        7z x Box2d_v2.3.0.7z -o box2d
+    - Configure with cmake (replace "Unix Makefiles" by the IDE you are using)
+        cmake . -G "Unix Makefiles"
+        cmake for help (check the bottom list)
+    - Set the BOX2D_BUILD_EXAMPLES (CMakeCache.txt) variable to OFF, we don't need it
+    - Build the library
+        make
+    - Installing on your computer
+        make install
+    - copy the PIRATES/doc/box2d.pc to /usr/lib/pkgconfig/
+        cd PIRATES/
+        cp doc/box2d.pc /usr/lib/pkgconfig/
+
+4. Configure
+    - use cmake with your IDE type as argument
+        cmake . -G "Unix Makefiles"
+    - if you have pkgconfig error, then you have not install correctly libraries
+
+5. Compile
+    - make server or make client
+
 
 Install
 -------

@@ -2,7 +2,7 @@
 //  @ Project :   PIRATES
 //  @ File Name : CWorldMap.h
 //  @ Date :      20/10/2014
-//  @ Author : 
+//  @ Author :
 //
 
 
@@ -13,7 +13,7 @@
 #include <string>
 #include <list>
 
-#include "CPlayer.h"
+#include <common/CPlayer.h>
 
 
 class CWorldMap
@@ -21,11 +21,11 @@ class CWorldMap
   public :
     CWorldMap();
     ~CWorldMap();
-    
+
     void  addPlayer(std::string name, int x, int y);
     void  removePlayer(std::string name);
     void  update(std::string in);
-    
+
   private:
   	std::list<CPlayer*>      m_lPlayers;
 };

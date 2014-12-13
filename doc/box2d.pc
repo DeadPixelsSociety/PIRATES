@@ -1,0 +1,12 @@
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: Box2D
+Description: Physic Engine
+URL: http://www.box2d.googlecode.com
+Version: 2.3.0
+Requires:
+Libs: -L${libdir} -lBox2D
+Cflags: -I${includedir}
