@@ -32,7 +32,7 @@ m_idClient(),
 m_sUpdate(),
 m_running(true),
 m_worldMap(),
-m_player(0, 0),
+m_pirate(0, 0),
 m_map(),
 m_window(sf::VideoMode(windowWidth, windowHeight), name),
 m_threadLoopSocket(&CClient::loopSocket, this),
@@ -94,7 +94,9 @@ void CClient::loopGame()
     while (m_running)
     {
         update();
+        m_mutex.lock();
         m_worldMap.update(m_sUpdate);
+        m_mutex.unlock();
         render();
 
         packet.clear();
@@ -162,7 +164,7 @@ void CClient::render()
 {
     m_window.clear(sf::Color::White);
     m_map.render(m_window);
-    m_player.render(m_window);
+    m_pirate.render(m_window);
     m_window.display();
 }
 

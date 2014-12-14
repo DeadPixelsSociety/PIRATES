@@ -61,7 +61,7 @@ class CClient
         bool                m_running;
 
         CWorldMap           m_worldMap;
-	    CPirate             m_player;
+	    CPirate             m_pirate;
 	    CMap                m_map;
 
         sf::RenderWindow    m_window;
