@@ -6,39 +6,57 @@
 //
 
 
-#ifndef _CSERVER_H
-#define _CSERVER_H
+#ifndef CSERVER_H
+#define CSERVER_H
 
+
+#include <vector>
+#include <iostream>
+#include <string>
 
 #include <common/SFML.h>
-#include <list>
 #include <common/CWorldMap.h>
 #include <worldBox/CWorldBox.h>
 
 
-class CServer
+#define SERVER_PORT 56747
+
+
+struct SClient
 {
-  public :
-          CServer(int nbMaxPlayer);
-          ~CServer();
-
-  	void  LoopSocket();
-  	void  LoopGame();
-
-
-  private :
-    sf::Thread    m_threadLoopSocket; // Thread gérant la partie réseau
-    sf::Thread    m_threadLoopGame;   // Thread gérant la partie physique
-
-  	CWorldMap     m_worldMap; // Carte des élements dynamiques et de leurs états
-  	CWorldBox     m_worldBox; // Univers physique Box2D
-
-  	sf::Clock     m_clock;
-
-  	std::list<sf::UdpSocket*> m_lSocket;
-  	sf::SocketSelector        m_socketSelector;
-
-  	bool  m_running;
+    sf::UdpSocket*  pSocket;
+    sf::IpAddress   ip;
+    unsigned short  port;
 };
 
-#endif  //_CSERVER_H
+
+class CServer
+{
+    public :
+        CServer(int nbMaxPlayers);
+        ~CServer();
+
+        void    loopGame();
+
+    private :
+        void    loopSocket();
+
+        int m_iNbMaxPlayers;
+
+        sf::Thread      m_threadLoopSocket;
+        sf::Mutex       m_mutex;
+
+        CWorldMap       m_worldMap;
+        CWorldBox       m_worldBox;
+
+        std::vector<SClient>    m_vClients;
+
+        std::string m_sUpdate;
+
+        bool  m_running;
+};
+
+
+#endif
+
+

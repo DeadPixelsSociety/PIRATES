@@ -10,7 +10,7 @@
 
 
 CWorldMap::CWorldMap() :
-m_lPlayers()
+m_vPlayers()
 {
 
 }
@@ -18,26 +18,41 @@ m_lPlayers()
 CWorldMap::~CWorldMap()
 {
   // Destroy all Players dynamically memory allowed in CWorldMap::addPlayer
-  for (std::list<CPlayer*>::iterator it = m_lPlayers.begin(); it != m_lPlayers.end(); it++)
+  for (std::vector<CPlayer*>::iterator it = m_vPlayers.begin(); it != m_vPlayers.end(); it++)
     free(*it);
 }
 
 
 void  CWorldMap::addPlayer(std::string name, int x, int y)
 {
-  m_lPlayers.push_back(new CPlayer(name, x, y));
+  m_vPlayers.push_back(new CPlayer(name, x, y));
 }
 
 void  CWorldMap::removePlayer(std::string name)
 {
-  for (std::list<CPlayer*>::iterator it = m_lPlayers.begin(); it != m_lPlayers.end(); it++)
+  for (std::vector<CPlayer*>::iterator it = m_vPlayers.begin(); it != m_vPlayers.end(); it++)
   {
     if ((*it)->getName() == name)
-      m_lPlayers.erase(it);
+      m_vPlayers.erase(it);
   }
 }
 
 void  CWorldMap::update(std::string in)
 {
-  // lire la chaine in formatée pour modifier la map
+    int i = 0;
+    while (in[i])
+    {
+        switch (in[i])
+        {
+            case NWorldMap::PLAYER :
+                m_vPlayers[in[i + 1]]->update(in.substr(i + 3, in[i + 2]));
+                i += in[i + 2] + 3;
+                break;
+            default :
+                i++;
+                break;
+        }
+    }
 }
+
+

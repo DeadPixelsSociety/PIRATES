@@ -6,11 +6,50 @@
 //
 
 
-#ifndef _CPLAYER_H
-#define _CPLAYER_H
+#ifndef CPLAYER_H
+#define CPLAYER_H
 
 
-#include "SFML.h"
+#include <string>
+#include <common/SFML.h>
+
+
+namespace NPlayer
+{
+    enum EUpdate
+    {
+        NAME,
+        POSITION,
+        STATE
+    };
+
+    enum EState
+    {
+        DIRECTION,
+        SPEED,
+        NB_ITEMS = 2
+    };
+
+    enum EDirection
+    {
+        UP          = 1,
+        RIGHT       = 2,
+        DOWN        = 4,
+        LEFT        = 8,
+        UP_RIGHT    = 3,
+        RIGHT_DOWN  = 6,
+        DOWN_LEFT   = 12,
+        LEFT_UP     = 9
+    };
+
+    enum ESpeed
+    {
+        STATIC,
+        WALK,
+        RUN,
+        SPRINT
+    };
+}
 
 
 class CPlayer
@@ -18,16 +57,15 @@ class CPlayer
   public :
     CPlayer(std::string name, int x, int y);
     ~CPlayer();
-    
-    inline  void  setName(std::string in)   {m_sName = in;}
-    inline  void  setPosition(int x, int y) {m_vPosition.x = x; m_vPosition.y = y;}
-    
-    inline  std::string       getName()     {return m_sName;}
-    inline  sf::Vector2<int>  getPosition() {return m_vPosition;}
-    
+
+    void    update(std::string in);
+
+    inline std::string getName()    {return m_sName;}
+
   private :
-    std::string       m_sName;
-    sf::Vector2<int>  m_vPosition;
+    std::string         m_sName;
+    sf::Vector2<int>    m_vPosition;
+    int                 m_iState[NPlayer::NB_ITEMS];
 };
 
 

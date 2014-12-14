@@ -28,7 +28,8 @@
 
 int main (int argc, char **argv)
 {
-  CServer server(2);
+    CServer server(2);
+    server.loopGame();
 
-	return 0;
+    return 0;
 }
