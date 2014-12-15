@@ -26,7 +26,7 @@
 
 CMap::CMap ()
 {
-	if(!tMapEau.loadFromFile("../../asset/image/eau.jpg"))
+	if(!tMapEau.loadFromFile("../asset/image/eau.jpg"))
 	{
 		//Affichage du message d'erreur et passage a la ligne
 		std::cout<<"Erreur"<< std::endl;
@@ -36,7 +36,7 @@ CMap::CMap ()
 	spMapEau.setPosition(0,0);
 	spMapEau.setScale(3.3f, 3.3f);
 
-	if(!tMapSable.loadFromFile("../../asset/image/sable.jpg"))
+	if(!tMapSable.loadFromFile("../asset/image/sable.jpg"))
 	{
 		//Affichage du message d'erreur et passage a la ligne
 		std::cout<<"Erreur"<< std::endl;

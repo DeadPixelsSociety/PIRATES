@@ -27,7 +27,7 @@
 
 CPirate::CPirate(float x, float y)
 {
-	if(!tPirate.loadFromFile("../../asset/image/violet.png"))
+	if(!tPirate.loadFromFile("../asset/image/violet.png"))
 	{
 		//Affichage du message d'erreur et passage a la ligne
 		std::cout<<"Erreur"<< std::endl;

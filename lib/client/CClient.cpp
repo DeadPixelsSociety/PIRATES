@@ -52,14 +52,16 @@ CClient::~CClient()
 
 void CClient::loopSocket()
 {
+    std::cout << "Launch loop socket\n";
     sf::TcpSocket   tcpSocket;
     sf::Packet      packet;
     sf::IpAddress   ipServer = SERVER_IP;
     unsigned short  portServer = SERVER_PORT;
     std::string     sPacketData;
 
-    if (tcpSocket.connect(ipServer, SERVER_PORT) == sf::Socket::Done)
+    if (tcpSocket.connect(ipServer, portServer) == sf::Socket::Done)
     {
+        std::cout << "Connection to server\n";
         int port;
         tcpSocket.receive(packet);
         packet >> m_idClient >> port;
@@ -75,6 +77,7 @@ void CClient::loopSocket()
         packet.clear();
         if (m_socket.receive(packet, ipServer, portServer) == sf::Socket::Done)
         {
+            std::cout << "Receive server data\n";
             packet >> sPacketData;
             m_mutex.lock();
             m_worldMap.update(sPacketData);
@@ -99,10 +102,14 @@ void CClient::loopGame()
         m_mutex.unlock();
         render();
 
-        packet.clear();
-        packet << m_sUpdate;
-        m_socket.send(packet, ipServer, portServer);
-        m_sUpdate.clear();
+        if (!m_sUpdate.empty())
+        {
+            std::cout << "Send server data : " << m_sUpdate << "\n";
+            packet.clear();
+            packet << m_sUpdate;
+            m_socket.send(packet, ipServer, portServer);
+            m_sUpdate.clear();
+        }
 
         if (!m_window.isOpen())
             m_running = false;
