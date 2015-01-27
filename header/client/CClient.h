@@ -51,9 +51,9 @@ class CClient
         void    loopGame();
 
     private :
-	    void    loopSocket();
-	    void    update();
-	    void    render();
+        void    loopSocket();
+        void    update();
+        void    render();
 
         std::string         m_name;
         int                 m_idClient;
@@ -61,13 +61,15 @@ class CClient
         bool                m_running;
 
         CWorldMap           m_worldMap;
-	    CPirate             m_pirate;
-	    CMap                m_map;
+        CPirate             m_pirate;
+        CMap                m_map;
 
         sf::RenderWindow    m_window;
         sf::Thread          m_threadLoopSocket;
         sf::Mutex           m_mutex;
         sf::UdpSocket       m_socket;
+        sf::IpAddress       m_ipServer;
+        unsigned short      m_portServer;
 };
 
 

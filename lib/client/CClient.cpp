@@ -37,7 +37,9 @@ m_map(),
 m_window(sf::VideoMode(windowWidth, windowHeight), name),
 m_threadLoopSocket(&CClient::loopSocket, this),
 m_mutex(),
-m_socket()
+m_socket(),
+m_ipServer(SERVER_IP),
+m_portServer(SERVER_PORT)
 {
     m_window.setFramerateLimit(60);
 
@@ -55,27 +57,32 @@ void CClient::loopSocket()
     std::cout << "Launch loop socket\n";
     sf::TcpSocket   tcpSocket;
     sf::Packet      packet;
-    sf::IpAddress   ipServer = SERVER_IP;
-    unsigned short  portServer = SERVER_PORT;
     std::string     sPacketData;
 
-    if (tcpSocket.connect(ipServer, portServer) == sf::Socket::Done)
+    tcpSocket.setBlocking(true);
+    if (tcpSocket.connect(m_ipServer, m_portServer) == sf::Socket::Done && tcpSocket.receive(packet) == sf::Socket::Done)
     {
+        tcpSocket.setBlocking(false);
+        m_mutex.lock();
         std::cout << "Connection to server\n";
-        int port;
-        tcpSocket.receive(packet);
-        packet >> m_idClient >> port;
-        m_socket.bind(port);
+        packet >> m_portServer >> m_idClient;
+        std::cout << "id client : " << m_idClient << " - port serveur : " << m_portServer << "\n";
+        std::cout << m_socket.getLocalPort() << std::endl;
+        m_socket.bind(sf::Socket::AnyPort);
+        packet.clear();
+        packet << m_socket.getLocalPort();
+        tcpSocket.send(packet);
         tcpSocket.disconnect();
         for (int i = 0; i < m_idClient; i++)
             m_worldMap.addPlayer(std::string("Player ") + std::to_string(i), 0, 0);
         m_worldMap.addPlayer(m_name, 0, 0);
+        m_mutex.unlock();
     }
 
     while (m_running)
     {
         packet.clear();
-        if (m_socket.receive(packet, ipServer, portServer) == sf::Socket::Done)
+        if (m_socket.receive(packet, m_ipServer, m_portServer) == sf::Socket::Done)
         {
             std::cout << "Receive server data\n";
             packet >> sPacketData;
@@ -91,29 +98,28 @@ void CClient::loopSocket()
 void CClient::loopGame()
 {
     sf::Packet      packet;
-    sf::IpAddress   ipServer = SERVER_IP;
-    unsigned short  portServer = SERVER_PORT;
 
     while (m_running)
     {
         update();
-        m_mutex.lock();
-        m_worldMap.update(m_sUpdate);
-        m_mutex.unlock();
-        render();
 
         if (!m_sUpdate.empty())
         {
-            std::cout << "Send server data : " << m_sUpdate << "\n";
+        //    m_mutex.lock();
+        //    m_worldMap.update(m_sUpdate);
+        //    m_mutex.unlock();
+
+            std::cout << "Send server data : " << m_sUpdate << " - " << m_portServer << "\n";
             packet.clear();
             packet << m_sUpdate;
-            m_socket.send(packet, ipServer, portServer);
+            m_socket.send(packet, m_ipServer, m_portServer);
             m_sUpdate.clear();
         }
 
         if (!m_window.isOpen())
             m_running = false;
 
+        render();
         sf::sleep(sf::milliseconds(50));
     }
 }

@@ -35,7 +35,7 @@ void  CServer::loopSocket()
     sf::TcpListener     listener;
     sf::TcpSocket       client;
     sf::SocketSelector  socketSelector;
-    int                 port = SERVER_PORT + 1;
+    unsigned short      port = SERVER_PORT;
     sf::Packet          packet;
     std::string         sPacketData;
     int                 iNbPlayers = 0;
@@ -54,14 +54,18 @@ void  CServer::loopSocket()
             if (listener.accept(client) == sf::Socket::Done)
             {
                 std::cout << "Accepting new client\n";
+                port++;
                 m_vClients.push_back(SClient());
                 m_vClients.back().ip = client.getRemoteAddress();
-                m_vClients.back().port = port;
                 m_vClients.back().pSocket = new sf::UdpSocket();
-                m_vClients.back().pSocket->bind(port++);
+                m_vClients.back().pSocket->bind(port);
                 socketSelector.add(*(m_vClients.back().pSocket));
                 packet << port << iNbPlayers;
                 client.send(packet);
+                packet.clear();
+                client.receive(packet);
+                packet >> m_vClients.back().port;
+                std::cout << "Port client : " << m_vClients.back().port << "\n";
                 client.disconnect();
                 m_worldMap.addPlayer(std::string("Player ") + std::to_string(iNbPlayers), 50, 50);
                 iNbPlayers++;
@@ -86,7 +90,7 @@ void  CServer::loopSocket()
 
         if (!sPacketData.empty())
         {
-            std::cout << "Update WorldMap\n";
+            std::cout << "Update WorldMap : " << sPacketData << "\n";
             m_mutex.lock();
             m_worldMap.update(sPacketData);
             m_mutex.unlock();
