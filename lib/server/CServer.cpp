@@ -58,6 +58,7 @@ void  CServer::loopSocket()
                 m_vClients.push_back(SClient());
                 m_vClients.back().ip = client.getRemoteAddress();
                 m_vClients.back().pSocket = new sf::UdpSocket();
+                m_vClients.back().pSocket->setBlocking(false);
                 m_vClients.back().pSocket->bind(port);
                 socketSelector.add(*(m_vClients.back().pSocket));
                 packet << port << iNbPlayers;
@@ -71,8 +72,8 @@ void  CServer::loopSocket()
                 iNbPlayers++;
             }
         }
-
-        if (socketSelector.wait())
+        std::cout << "Loop server running" << m_running << "\n";
+        if (socketSelector.wait(sf::seconds(1)))
         {
             for (std::vector<SClient>::iterator it = m_vClients.begin(); it != m_vClients.end(); it++)
             {
@@ -90,11 +91,11 @@ void  CServer::loopSocket()
 
         if (!sPacketData.empty())
         {
-            std::cout << "Update WorldMap : " << sPacketData << "\n";
             m_mutex.lock();
+            std::cout << "Update WorldMap : " << sPacketData << "\n";
             m_worldMap.update(sPacketData);
-            m_mutex.unlock();
             m_sUpdate += sPacketData;
+            m_mutex.unlock();
         }
 
         sf::sleep(sf::milliseconds(50));
