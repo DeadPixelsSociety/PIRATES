@@ -42,8 +42,8 @@ m_ipServer(SERVER_IP),
 m_portServer(SERVER_PORT)
 {
     m_window.setFramerateLimit(60);
-
-    m_threadLoopSocket.launch();
+    if (connectServer())
+        m_threadLoopSocket.launch();
 }
 
 CClient::~CClient()
@@ -51,45 +51,45 @@ CClient::~CClient()
     m_running = false;
 }
 
-void CClient::loopSocket()
+bool CClient::connectServer()
 {
-    std::cout << "Launch loop socket\n";
     sf::TcpSocket   tcpSocket;
     sf::Packet      packet;
-    std::string     sPacketData;
 
-    m_mutex.lock();
-    if (tcpSocket.connect(m_ipServer, m_portServer) == sf::Socket::Done && tcpSocket.receive(packet) == sf::Socket::Done)
+    if (tcpSocket.connect(m_ipServer, m_portServer) == sf::Socket::Done
+        && tcpSocket.receive(packet) == sf::Socket::Done)
     {
         std::cout << "Connection to server\n";
         packet >> m_portServer >> m_idClient;
         std::cout << "id client : " << m_idClient << " - port serveur : " << m_portServer << "\n";
+        m_socket.bind(sf::Socket::AnyPort);
         m_socket.setBlocking(false);
-        m_socket.bind(44444);
-        packet.clear();
         packet << m_socket.getLocalPort();
         tcpSocket.send(packet);
-        tcpSocket.disconnect();
         for (int i = 0; i < m_idClient; i++)
             m_worldMap.addPlayer(std::string("Player ") + std::to_string(i), 0, 0);
         m_worldMap.addPlayer(m_name, 0, 0);
+        return SUCCESS;
     }
-    m_mutex.unlock();
+    return FAILURE;
+}
 
-    //portServer = 56748;
+void CClient::loopSocket()
+{
+    sf::Packet      packet;
+    std::string     sPacketData;
+
     while (m_running)
     {
-        m_mutex.lock();
-        std::cout << "Loop socket1 ; port serveur : " << m_portServer << std::endl;
         packet.clear();
-        if (m_socket.receive(packet, m_ipServer, m_portServer) != sf::Socket::NotReady)
+        m_mutex.lock();
+        if (m_socket.receive(packet, m_ipServer, m_portServer) == sf::Socket::Done)
         {
-        std::cout << "Loop socket receive ; port serveur : " << m_portServer << std::endl;
             std::cout << "Receive server data\n";
+            sPacketData.clear();
             packet >> sPacketData;
             m_worldMap.update(sPacketData);
         }
-
         m_mutex.unlock();
         sf::sleep(sf::milliseconds(50));
     }
@@ -101,18 +101,20 @@ void CClient::loopGame()
 
     while (m_running)
     {
-        m_mutex.lock();
         update();
+
         if (!m_sUpdate.empty())
         {
+            m_mutex.lock();
             m_worldMap.update(m_sUpdate);
+
             std::cout << "Send server data : " << m_sUpdate << " - " << m_portServer << "\n";
             packet.clear();
             packet << m_sUpdate;
             m_socket.send(packet, m_ipServer, m_portServer);
             m_sUpdate.clear();
+            m_mutex.unlock();
         }
-        m_mutex.unlock();
 
         if (!m_window.isOpen())
             m_running = false;
@@ -148,7 +150,6 @@ void CClient::update()
                     i += NPlayer::DOWN;
                 else if(event.key.code == sf::Keyboard::Left)
                     i += NPlayer::LEFT;
-                m_sUpdate += std::to_string(i);
                 switch(event.key.code)
                 {
                     case sf::Keyboard::Escape :
@@ -157,6 +158,7 @@ void CClient::update()
                     default :
                         break;
                 }
+                m_sUpdate += std::to_string(i);
                 break;
             }
             case sf::Event::KeyReleased :

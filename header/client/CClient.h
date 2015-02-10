@@ -41,6 +41,9 @@
 #define SERVER_IP   "127.0.0.1"
 #define SERVER_PORT 56747
 
+#define SUCCESS     1
+#define FAILURE     0
+
 
 class CClient
 {
@@ -51,6 +54,7 @@ class CClient
         void    loopGame();
 
     private :
+        bool    connectServer();
         void    loopSocket();
         void    update();
         void    render();
