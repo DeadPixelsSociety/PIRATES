@@ -54,7 +54,7 @@ class CClient
         void    loopGame();
 
     private :
-        bool    connectServer();
+        void    connectServer();
         void    loopSocket();
         void    update();
         void    render();

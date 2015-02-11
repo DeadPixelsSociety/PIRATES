@@ -40,8 +40,6 @@ void  CServer::loopSocket()
     std::string         sPacketData;
     int                 iNbPlayers = 0;
 
-    //listener.setBlocking(false);
-    //client.setBlocking(false);
     if (listener.listen(SERVER_PORT) != sf::Socket::Done)
         std::cerr << "Error during listening at " << SERVER_PORT;
 
@@ -54,11 +52,11 @@ void  CServer::loopSocket()
             if (listener.accept(client) == sf::Socket::Done)
             {
                 std::cout << "Accepting new client\n";
+                listener.setBlocking(false);
                 port++;
                 m_vClients.push_back(SClient());
                 m_vClients.back().ip = client.getRemoteAddress();
                 m_vClients.back().pSocket = new sf::UdpSocket();
-                m_vClients.back().pSocket->setBlocking(false);
                 m_vClients.back().pSocket->bind(port);
                 socketSelector.add(*(m_vClients.back().pSocket));
                 packet << port << iNbPlayers;
@@ -72,8 +70,8 @@ void  CServer::loopSocket()
                 iNbPlayers++;
             }
         }
-        std::cout << "Loop server running" << m_running << "\n";
-        if (socketSelector.wait(sf::seconds(1)))
+
+        if (socketSelector.wait())
         {
             for (std::vector<SClient>::iterator it = m_vClients.begin(); it != m_vClients.end(); it++)
             {
