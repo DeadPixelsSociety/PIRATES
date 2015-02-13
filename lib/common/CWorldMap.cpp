@@ -54,4 +54,13 @@ int  CWorldMap::update(std::string in)
     return i;
 }
 
+void CWorldMap::printUpdate(std::string in)
+{
+    for (unsigned int i = 0; i < in.length(); i++)
+    {
+        std::cout << (int)in[i] << ".";
+    }
+    std::cout << std::endl;
+}
+
 

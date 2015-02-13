@@ -35,12 +35,15 @@ std::string  CWorldBox::update(CWorldMap *worldMap, sf::Time elapsed)
 
     for (std::vector<CPlayer*>::iterator it = worldMap->m_vPlayers.begin(); it != worldMap->m_vPlayers.end(); it++)
     {
-        if ((*it)->m_iState[NPlayer::DIRECTION] == NPlayer::LEFT)
+        if ((*it)->m_iState[NPlayer::DIRECTION] == NPlayer::RIGHT)
         {
-            std::cout << "changement coordonnées\n";
-            sUpdate += NWorldMap::PLAYER;
+            sUpdate.push_back(NWorldMap::PLAYER);
             sUpdate += (char)0;
-            sUpdate += NPlayer::POSITION;
+            sUpdate += (char)NPlayer::STATE;
+            sUpdate += (char)NPlayer::DIRECTION;
+            sUpdate += (char)0;
+            sUpdate += (char)NPlayer::POSITION;
+            std::cout << "x = " << std::to_string((*it)->m_vPosition.x) << " et y = " << std::to_string((*it)->m_vPosition.y) << std::endl;
         }
     }
 

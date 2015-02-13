@@ -44,7 +44,6 @@ CPirate::~CPirate()
 
 void CPirate::update(sf::Vector2<int> in)
 {
-    std::cout << "Changement coordonnee draw : " << in.x << " " << in.y << std::endl;
     spPirate.setPosition(in.x, in.y);
 }
 

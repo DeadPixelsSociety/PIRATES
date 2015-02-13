@@ -38,6 +38,7 @@ class CWorldMap
         void    addPlayer(std::string name, int x, int y);
         void    removePlayer(std::string name);
         int   update(std::string in);
+        void    printUpdate(std::string in);
 
     private :
         std::vector<CPlayer*> m_vPlayers;

@@ -43,7 +43,6 @@ m_portServer(SERVER_PORT)
 {
     m_window.setFramerateLimit(60);
     connectServer();
-    std::cout << "port server : " << m_portServer << std::endl;
     m_threadLoopSocket.launch();
 }
 
@@ -60,15 +59,13 @@ void CClient::connectServer()
     if (tcpSocket.connect(m_ipServer, m_portServer) == sf::Socket::Done
         && tcpSocket.receive(packet) == sf::Socket::Done)
     {
-        std::cout << "Connection to server\n";
         packet >> m_portServer >> m_idClient;
-        std::cout << "id client : " << m_idClient << " - port serveur : " << m_portServer << "\n";
         m_socket.bind(sf::Socket::AnyPort);
         packet << m_socket.getLocalPort();
         tcpSocket.send(packet);
         for (int i = 0; i < m_idClient; i++)
             m_worldMap.addPlayer(std::string("Player ") + std::to_string(i), 50, 50);
-        m_worldMap.addPlayer(m_name, 0, 0);
+        m_worldMap.addPlayer(m_name, 50, 50);
     }
 }
 
@@ -84,13 +81,10 @@ void CClient::loopSocket()
         packet.clear();
         if (m_socket.receive(packet, ipServer, portServer) == sf::Socket::Done)
         {
-            m_mutex.lock();
-            std::cout << "Receive server data\n";
             sPacketData.clear();
             packet >> sPacketData;
-            printUpdate(sPacketData);
+            m_worldMap.printUpdate(sPacketData);
             m_worldMap.update(sPacketData);
-            m_mutex.unlock();
         }
         sf::sleep(sf::milliseconds(50));
     }
@@ -107,11 +101,7 @@ void CClient::loopGame()
 
         if (m_sUpdate.length() > 2)
         {
-       ///     m_mutex.lock();
-            printUpdate(m_sUpdate);
-         //   m_worldMap.update(m_sUpdate);
-         //   m_mutex.unlock();
-
+            m_worldMap.printUpdate(m_sUpdate);
             packet.clear();
             packet << m_sUpdate;
             m_socket.send(packet, m_ipServer, m_portServer);
@@ -123,15 +113,6 @@ void CClient::loopGame()
         render();
         sf::sleep(sf::milliseconds(50));
     }
-}
-
-void CClient::printUpdate(std::string in)
-{
-    for (unsigned int i = 0; i < in.length(); i++)
-    {
-        std::cout << (int)in[i] << ".";
-    }
-    std::cout << std::endl;
 }
 
 void CClient::update()

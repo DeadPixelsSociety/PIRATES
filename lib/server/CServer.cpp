@@ -31,7 +31,6 @@ CServer::~CServer()
 
 void  CServer::loopSocket()
 {
-    std::cout << "Launch loop socket\n";
     sf::TcpListener     listener;
     sf::TcpSocket       client;
     sf::SocketSelector  socketSelector;
@@ -49,7 +48,6 @@ void  CServer::loopSocket()
         {
             if (listener.accept(client) == sf::Socket::Done)
             {
-                std::cout << "Accepting new client\n";
                 listener.setBlocking(false);
                 port++;
                 m_vClients.push_back(SClient());
@@ -62,7 +60,6 @@ void  CServer::loopSocket()
                 packet.clear();
                 client.receive(packet);
                 packet >> m_vClients.back().port;
-                std::cout << "Port client : " << m_vClients.back().port << "\n";
                 client.disconnect();
                 m_worldMap.addPlayer(std::string("Player ") + std::to_string(iNbPlayers), 50, 50);
                 iNbPlayers++;
@@ -78,7 +75,6 @@ void  CServer::loopSocket()
                     if (it->pSocket->receive(packet, it->ip, it->port) == sf::Socket::Done)
                     {
                         packet >> sUpdate;
-                        std::cout << "Receive client packet : " << sUpdate << "\n";
                         packet.clear();
                     }
                 }
@@ -88,7 +84,6 @@ void  CServer::loopSocket()
         if (!sUpdate.empty())
         {
             m_mutex.lock();
-            std::cout << "Update WorldMap \n";
             m_worldMap.update(sUpdate);
             sUpdate.clear();
             m_mutex.unlock();
@@ -112,8 +107,8 @@ void  CServer::loopGame()
 
         if (!sUpdate.empty())
         {
-            sUpdate = m_worldMap.update(sUpdate);
-            std::cout << "Send client data\n";
+            m_worldMap.printUpdate(sUpdate);
+            m_worldMap.update(sUpdate);
             packet.clear();
             packet << sUpdate;
             for (std::vector<SClient>::iterator it = m_vClients.begin(); it != m_vClients.end(); it++)

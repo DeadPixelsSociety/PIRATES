@@ -30,7 +30,7 @@ int    CPlayer::update(std::string in)
         switch (in[i])
         {
             case NPlayer::POSITION :
-                m_vPosition.x += 20;
+                m_vPosition.x += 3;
                 std::cout << "position x = " << m_vPosition.x << "\n";
                 i += 1;
                 break;
