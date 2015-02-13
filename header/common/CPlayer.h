@@ -11,6 +11,7 @@
 
 
 #include <string>
+#include <iostream>
 #include <common/SFML.h>
 
 
@@ -54,13 +55,16 @@ namespace NPlayer
 
 class CPlayer
 {
+    friend class CWorldBox;
+
   public :
     CPlayer(std::string name, int x, int y);
     ~CPlayer();
 
-    void    update(std::string in);
+    int    update(std::string in);
 
     inline std::string getName()    {return m_sName;}
+    inline sf::Vector2<int> getPos()    {return m_vPosition;}
 
   private :
     std::string         m_sName;

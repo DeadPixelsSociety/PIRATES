@@ -13,6 +13,10 @@
 #include <Box2D/Box2D.h>
 #include <common/SFML.h>
 
+#include <common/CWorldMap.h>
+
+
+class CWorldMap;
 
 class CWorldBox
 {
@@ -20,7 +24,7 @@ class CWorldBox
     CWorldBox();
     ~CWorldBox();
 
-    void  update(sf::Time elapsed);
+    std::string  update(CWorldMap *worldMap, sf::Time elapsed);
 
   private :
     b2Vec2    m_gravity;

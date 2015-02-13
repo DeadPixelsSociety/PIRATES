@@ -17,7 +17,6 @@ m_vPlayers()
 
 CWorldMap::~CWorldMap()
 {
-  // Destroy all Players dynamically memory allowed in CWorldMap::addPlayer
   for (std::vector<CPlayer*>::iterator it = m_vPlayers.begin(); it != m_vPlayers.end(); it++)
     free(*it);
 }
@@ -37,22 +36,22 @@ void  CWorldMap::removePlayer(std::string name)
   }
 }
 
-void  CWorldMap::update(std::string in)
+int  CWorldMap::update(std::string in)
 {
-    int i = 0;
-    while (in[i])
+    unsigned int i = 0;
+    while (i < in.length())
     {
         switch (in[i])
         {
             case NWorldMap::PLAYER :
-                m_vPlayers[in[i + 1]]->update(in.substr(i + 3, in[i + 2]));
-                i += in[i + 2] + 3;
+                i += m_vPlayers[(int)in[i + 1]]->update(in.erase(0, 2));
                 break;
             default :
-                i++;
+                return i;
                 break;
         }
     }
+    return i;
 }
 
 

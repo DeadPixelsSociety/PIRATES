@@ -54,6 +54,7 @@ class CClient
         void    loopGame();
 
     private :
+        void    printUpdate(std::string in);
         void    connectServer();
         void    loopSocket();
         void    update();

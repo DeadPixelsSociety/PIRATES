@@ -32,7 +32,7 @@ m_idClient(),
 m_sUpdate(),
 m_running(true),
 m_worldMap(),
-m_pirate(0, 0),
+m_pirate(50, 50),
 m_map(),
 m_window(sf::VideoMode(windowWidth, windowHeight), name),
 m_threadLoopSocket(&CClient::loopSocket, this),
@@ -67,7 +67,7 @@ void CClient::connectServer()
         packet << m_socket.getLocalPort();
         tcpSocket.send(packet);
         for (int i = 0; i < m_idClient; i++)
-            m_worldMap.addPlayer(std::string("Player ") + std::to_string(i), 0, 0);
+            m_worldMap.addPlayer(std::string("Player ") + std::to_string(i), 50, 50);
         m_worldMap.addPlayer(m_name, 0, 0);
     }
 }
@@ -82,13 +82,13 @@ void CClient::loopSocket()
     while (m_running)
     {
         packet.clear();
-        std::cout << "Loop socket - port server : " << portServer << std::endl;
         if (m_socket.receive(packet, ipServer, portServer) == sf::Socket::Done)
         {
             m_mutex.lock();
             std::cout << "Receive server data\n";
             sPacketData.clear();
             packet >> sPacketData;
+            printUpdate(sPacketData);
             m_worldMap.update(sPacketData);
             m_mutex.unlock();
         }
@@ -102,19 +102,19 @@ void CClient::loopGame()
 
     while (m_running)
     {
+        m_sUpdate.clear();
         update();
 
         if (m_sUpdate.length() > 2)
         {
-            m_mutex.lock();
-            m_worldMap.update(m_sUpdate);
-            m_mutex.unlock();
+       ///     m_mutex.lock();
+            printUpdate(m_sUpdate);
+         //   m_worldMap.update(m_sUpdate);
+         //   m_mutex.unlock();
 
-            std::cout << "Send server data : " << m_sUpdate << " - " << m_portServer << "\n";
             packet.clear();
             packet << m_sUpdate;
             m_socket.send(packet, m_ipServer, m_portServer);
-            m_sUpdate.clear();
         }
 
         if (!m_window.isOpen())
@@ -125,11 +125,20 @@ void CClient::loopGame()
     }
 }
 
+void CClient::printUpdate(std::string in)
+{
+    for (unsigned int i = 0; i < in.length(); i++)
+    {
+        std::cout << (int)in[i] << ".";
+    }
+    std::cout << std::endl;
+}
+
 void CClient::update()
 {
     sf::Event   event;
-    m_sUpdate = std::to_string(NWorldMap::PLAYER) + std::to_string(m_idClient);
-    static int  i = 0;
+    m_sUpdate += NWorldMap::PLAYER;
+    m_sUpdate += m_idClient;
 
     while (m_window.pollEvent(event))
     {
@@ -142,38 +151,28 @@ void CClient::update()
             }
             case sf::Event::KeyPressed :
             {
-                m_sUpdate += std::to_string(NPlayer::DIRECTION);
-                if(event.key.code == sf::Keyboard::Up)
-                    i += NPlayer::UP;
-                else if(event.key.code == sf::Keyboard::Right)
-                    i += NPlayer::RIGHT;
-                else if(event.key.code == sf::Keyboard::Down)
-                    i += NPlayer::DOWN;
-                else if(event.key.code == sf::Keyboard::Left)
-                    i += NPlayer::LEFT;
+                m_sUpdate += NPlayer::STATE;
+                m_sUpdate += NPlayer::DIRECTION;
                 switch(event.key.code)
                 {
+                    case sf::Keyboard::Up :
+                        m_sUpdate += NPlayer::UP;
+                        break;
+                    case sf::Keyboard::Right :
+                        m_sUpdate += NPlayer::RIGHT;
+                        break;
+                    case sf::Keyboard::Down :
+                        m_sUpdate += NPlayer::DOWN;
+                        break;
+                    case sf::Keyboard::Left :
+                        m_sUpdate += NPlayer::LEFT;
+                        break;
                     case sf::Keyboard::Escape :
                         m_running = false;
                         break;
                     default :
                         break;
                 }
-                m_sUpdate += std::to_string(i);
-                break;
-            }
-            case sf::Event::KeyReleased :
-            {
-                m_sUpdate += std::to_string(NPlayer::DIRECTION);
-                if(event.key.code == sf::Keyboard::Right)
-                    i -= NPlayer::UP;
-                else if(event.key.code == sf::Keyboard::Left)
-                    i -= NPlayer::RIGHT;
-                else if(event.key.code == sf::Keyboard::Up)
-                    i -= NPlayer::DOWN;
-                else if(event.key.code == sf::Keyboard::Down)
-                    i -= NPlayer::LEFT;
-                m_sUpdate += std::to_string(i);
                 break;
             }
             default :
@@ -186,6 +185,7 @@ void CClient::render()
 {
     m_window.clear(sf::Color::White);
     m_map.render(m_window);
+    m_pirate.update(m_worldMap.m_vPlayers[0]->getPos());
     m_pirate.render(m_window);
     m_window.display();
 }

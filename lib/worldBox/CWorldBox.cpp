@@ -29,8 +29,21 @@ CWorldBox::~CWorldBox()
 
 }
 
-void  CWorldBox::update(sf::Time elapsed)
+std::string  CWorldBox::update(CWorldMap *worldMap, sf::Time elapsed)
 {
+    std::string sUpdate;
 
+    for (std::vector<CPlayer*>::iterator it = worldMap->m_vPlayers.begin(); it != worldMap->m_vPlayers.end(); it++)
+    {
+        if ((*it)->m_iState[NPlayer::DIRECTION] == NPlayer::LEFT)
+        {
+            std::cout << "changement coordonnées\n";
+            sUpdate += NWorldMap::PLAYER;
+            sUpdate += (char)0;
+            sUpdate += NPlayer::POSITION;
+        }
+    }
+
+    return sUpdate;
 }
 

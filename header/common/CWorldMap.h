@@ -14,6 +14,7 @@
 #include <vector>
 
 #include <common/CPlayer.h>
+#include <worldBox/CWorldBox.h>
 
 
 namespace NWorldMap
@@ -27,13 +28,16 @@ namespace NWorldMap
 
 class CWorldMap
 {
+    friend class CWorldBox;
+    friend class CClient;
+
     public :
         CWorldMap();
         ~CWorldMap();
 
-        void  addPlayer(std::string name, int x, int y);
-        void  removePlayer(std::string name);
-        void  update(std::string in);
+        void    addPlayer(std::string name, int x, int y);
+        void    removePlayer(std::string name);
+        int   update(std::string in);
 
     private :
         std::vector<CPlayer*> m_vPlayers;

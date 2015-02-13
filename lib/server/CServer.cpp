@@ -37,7 +37,7 @@ void  CServer::loopSocket()
     sf::SocketSelector  socketSelector;
     unsigned short      port = SERVER_PORT;
     sf::Packet          packet;
-    std::string         sPacketData;
+    std::string         sUpdate;
     int                 iNbPlayers = 0;
 
     if (listener.listen(SERVER_PORT) != sf::Socket::Done)
@@ -45,8 +45,6 @@ void  CServer::loopSocket()
 
     while (m_running)
     {
-        sPacketData.clear();
-
         if (iNbPlayers < m_iNbMaxPlayers)
         {
             if (listener.accept(client) == sf::Socket::Done)
@@ -79,20 +77,20 @@ void  CServer::loopSocket()
                 {
                     if (it->pSocket->receive(packet, it->ip, it->port) == sf::Socket::Done)
                     {
-                        std::cout << "Receive client packet\n";
-                        packet >> sPacketData;
+                        packet >> sUpdate;
+                        std::cout << "Receive client packet : " << sUpdate << "\n";
                         packet.clear();
                     }
                 }
             }
         }
 
-        if (!sPacketData.empty())
+        if (!sUpdate.empty())
         {
             m_mutex.lock();
-            std::cout << "Update WorldMap : " << sPacketData << "\n";
-            m_worldMap.update(sPacketData);
-            m_sUpdate += sPacketData;
+            std::cout << "Update WorldMap \n";
+            m_worldMap.update(sUpdate);
+            sUpdate.clear();
             m_mutex.unlock();
         }
 
@@ -104,20 +102,22 @@ void  CServer::loopGame()
 {
     sf::Clock   clock;
     sf::Packet  packet;
+    std::string sUpdate;
 
     while (m_running)
     {
         sf::Time elapsed = clock.restart();
-        m_worldBox.update(elapsed);
+        sUpdate.clear();
+        sUpdate = m_worldBox.update(&m_worldMap, elapsed);
 
-        if (!m_sUpdate.empty())
+        if (!sUpdate.empty())
         {
-            std::cout << "Send clien data\n";
+            sUpdate = m_worldMap.update(sUpdate);
+            std::cout << "Send client data\n";
             packet.clear();
-            packet << m_sUpdate;
+            packet << sUpdate;
             for (std::vector<SClient>::iterator it = m_vClients.begin(); it != m_vClients.end(); it++)
                 it->pSocket->send(packet, it->ip, it->port);
-            m_sUpdate.clear();
         }
 
         sf::sleep(sf::milliseconds(50));

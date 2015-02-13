@@ -34,10 +34,10 @@
 class CPirate
 {
     public :
-        CPirate(float x, float y);
+        CPirate(int x, int y);
         ~CPirate();
 
-        void    update(float x, float y);
+        void    update(sf::Vector2<int> in);
         void    render(sf::RenderWindow& window);
 
     private :

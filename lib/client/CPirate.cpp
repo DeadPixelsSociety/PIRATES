@@ -25,7 +25,7 @@
 #include <client/CPirate.h>
 
 
-CPirate::CPirate(float x, float y)
+CPirate::CPirate(int x, int y)
 {
 	if(!tPirate.loadFromFile("../asset/image/violet.png"))
 	{
@@ -42,9 +42,10 @@ CPirate::~CPirate()
 
 }
 
-void CPirate::update(float x, float y)
+void CPirate::update(sf::Vector2<int> in)
 {
-    spPirate.setPosition(x, y);
+    std::cout << "Changement coordonnee draw : " << in.x << " " << in.y << std::endl;
+    spPirate.setPosition(in.x, in.y);
 }
 
 void CPirate::render(sf::RenderWindow& window)
