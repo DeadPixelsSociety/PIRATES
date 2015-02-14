@@ -51,8 +51,6 @@ class CServer
 
         std::vector<SClient>    m_vClients;
 
-        std::string m_sUpdate;
-
         bool  m_running;
 };
 

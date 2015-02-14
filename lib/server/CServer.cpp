@@ -36,7 +36,7 @@ void  CServer::loopSocket()
     sf::SocketSelector  socketSelector;
     unsigned short      port = SERVER_PORT;
     sf::Packet          packet;
-    std::string         sUpdate;
+    CMapQuery           mapQuery;
     int                 iNbPlayers = 0;
 
     if (listener.listen(SERVER_PORT) != sf::Socket::Done)
@@ -72,21 +72,15 @@ void  CServer::loopSocket()
             {
                 if (socketSelector.isReady(*(it->pSocket)))
                 {
-                    if (it->pSocket->receive(packet, it->ip, it->port) == sf::Socket::Done)
+                    mapQuery.clear();
+                    if (it->pSocket->receive(mapQuery, it->ip, it->port) == sf::Socket::Done)
                     {
-                        packet >> sUpdate;
-                        packet.clear();
+                        m_mutex.lock();
+                        m_worldMap.update(mapQuery);
+                        m_mutex.unlock();
                     }
                 }
             }
-        }
-
-        if (!sUpdate.empty())
-        {
-            m_mutex.lock();
-            m_worldMap.update(sUpdate);
-            sUpdate.clear();
-            m_mutex.unlock();
         }
 
         sf::sleep(sf::milliseconds(50));
@@ -96,24 +90,18 @@ void  CServer::loopSocket()
 void  CServer::loopGame()
 {
     sf::Clock   clock;
-    sf::Packet  packet;
-    std::string sUpdate;
+    CMapQuery   mapQuery;
 
     while (m_running)
     {
         sf::Time elapsed = clock.restart();
-        sUpdate.clear();
-        sUpdate = m_worldBox.update(&m_worldMap, elapsed);
+        mapQuery.clear();
+        m_mutex.lock();
+        mapQuery = m_worldBox.update(&m_worldMap, elapsed);
+        m_mutex.unlock();
 
-        if (!sUpdate.empty())
-        {
-            m_worldMap.printUpdate(sUpdate);
-            m_worldMap.update(sUpdate);
-            packet.clear();
-            packet << sUpdate;
-            for (std::vector<SClient>::iterator it = m_vClients.begin(); it != m_vClients.end(); it++)
-                it->pSocket->send(packet, it->ip, it->port);
-        }
+        for (std::vector<SClient>::iterator it = m_vClients.begin(); it != m_vClients.end(); it++)
+            it->pSocket->send(mapQuery, it->ip, it->port);
 
         sf::sleep(sf::milliseconds(50));
     }

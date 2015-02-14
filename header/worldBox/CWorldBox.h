@@ -16,6 +16,7 @@
 #include <common/CWorldMap.h>
 
 
+class CMapQuery;
 class CWorldMap;
 
 class CWorldBox
@@ -24,7 +25,7 @@ class CWorldBox
     CWorldBox();
     ~CWorldBox();
 
-    std::string  update(CWorldMap *worldMap, sf::Time elapsed);
+    CMapQuery  update(CWorldMap *worldMap, sf::Time elapsed);
 
   private :
     b2Vec2    m_gravity;

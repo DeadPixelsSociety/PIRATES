@@ -36,31 +36,29 @@ void  CWorldMap::removePlayer(std::string name)
   }
 }
 
-int  CWorldMap::update(std::string in)
+void    CWorldMap::clear()
 {
-    unsigned int i = 0;
-    while (i < in.length())
+    for(std::vector<CPlayer*>::iterator it = m_vPlayers.begin(); it != m_vPlayers.end(); it++)
+        (*it)->clear();
+}
+
+int    CWorldMap::update(CMapQuery &in)
+{
+    int i;
+
+    clear();
+    while (in >> i)
     {
-        switch (in[i])
+        switch (i)
         {
             case NWorldMap::PLAYER :
-                i += m_vPlayers[(int)in[i + 1]]->update(in.erase(0, 2));
+                i = m_vPlayers[in.next()]->update(in);
                 break;
             default :
                 return i;
-                break;
         }
     }
     return i;
-}
-
-void CWorldMap::printUpdate(std::string in)
-{
-    for (unsigned int i = 0; i < in.length(); i++)
-    {
-        std::cout << (int)in[i] << ".";
-    }
-    std::cout << std::endl;
 }
 
 

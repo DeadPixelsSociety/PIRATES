@@ -22,21 +22,23 @@ CPlayer::~CPlayer()
 
 }
 
-int    CPlayer::update(std::string in)
+void    CPlayer::clear()
 {
-    unsigned int i = 0;
-    while (in[i])
+    m_iState[NPlayer::DIRECTION] = 0;
+}
+
+int    CPlayer::update(CMapQuery &in)
+{
+    int i;
+    while (in >> i)
     {
-        switch (in[i])
+        switch (i)
         {
             case NPlayer::POSITION :
-                m_vPosition.x += 3;
-                std::cout << "position x = " << m_vPosition.x << "\n";
-                i += 1;
+                in >> m_vPosition.x >> m_vPosition.y;
                 break;
             case NPlayer::STATE :
-                m_iState[(int)in[i + 1]] = in[i + 2];
-                i += 3;
+                m_iState[in.next()] = in.next();
                 break;
             default :
                 return i;

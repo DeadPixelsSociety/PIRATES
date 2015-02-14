@@ -61,8 +61,8 @@ class CClient
 
         std::string         m_name;
         int                 m_idClient;
-        std::string         m_sUpdate;
         bool                m_running;
+        CMapQuery           m_mapQuery;
 
         CWorldMap           m_worldMap;
         CPirate             m_pirate;
@@ -70,7 +70,6 @@ class CClient
 
         sf::RenderWindow    m_window;
         sf::Thread          m_threadLoopSocket;
-        sf::Mutex           m_mutex;
         sf::UdpSocket       m_socket;
         sf::IpAddress       m_ipServer;
         unsigned short      m_portServer;

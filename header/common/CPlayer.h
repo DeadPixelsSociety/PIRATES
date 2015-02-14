@@ -12,7 +12,9 @@
 
 #include <string>
 #include <iostream>
+
 #include <common/SFML.h>
+#include <common/CWorldMap.h>
 
 
 namespace NPlayer
@@ -37,10 +39,6 @@ namespace NPlayer
         RIGHT       = 2,
         DOWN        = 4,
         LEFT        = 8,
-        UP_RIGHT    = 3,
-        RIGHT_DOWN  = 6,
-        DOWN_LEFT   = 12,
-        LEFT_UP     = 9
     };
 
     enum ESpeed
@@ -53,6 +51,8 @@ namespace NPlayer
 }
 
 
+class CMapQuery;
+
 class CPlayer
 {
     friend class CWorldBox;
@@ -61,7 +61,8 @@ class CPlayer
     CPlayer(std::string name, int x, int y);
     ~CPlayer();
 
-    int    update(std::string in);
+    void    clear();
+    int    update(CMapQuery &in);
 
     inline std::string getName()    {return m_sName;}
     inline sf::Vector2<int> getPos()    {return m_vPosition;}

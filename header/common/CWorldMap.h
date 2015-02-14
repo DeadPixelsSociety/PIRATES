@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 
+#include <common/SFML.h>
 #include <common/CPlayer.h>
 #include <worldBox/CWorldBox.h>
 
@@ -26,6 +27,17 @@ namespace NWorldMap
 }
 
 
+class CMapQuery : public sf::Packet
+{
+    public :
+        inline  CMapQuery() : Packet()   {};
+        inline  ~CMapQuery()             {};
+
+        inline  int next()  {int i; operator>>(i); return i;};
+};
+
+class CPlayer;
+
 class CWorldMap
 {
     friend class CWorldBox;
@@ -37,8 +49,9 @@ class CWorldMap
 
         void    addPlayer(std::string name, int x, int y);
         void    removePlayer(std::string name);
-        int   update(std::string in);
-        void    printUpdate(std::string in);
+        inline  CPlayer*    getPlayer(int in)   {return m_vPlayers[in];}
+        void    clear();
+        int     update(CMapQuery &in);
 
     private :
         std::vector<CPlayer*> m_vPlayers;

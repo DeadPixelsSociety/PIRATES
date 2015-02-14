@@ -29,24 +29,36 @@ CWorldBox::~CWorldBox()
 
 }
 
-std::string  CWorldBox::update(CWorldMap *worldMap, sf::Time elapsed)
+CMapQuery  CWorldBox::update(CWorldMap *worldMap, sf::Time elapsed)
 {
-    std::string sUpdate;
+    CMapQuery mapQuery;
 
     for (std::vector<CPlayer*>::iterator it = worldMap->m_vPlayers.begin(); it != worldMap->m_vPlayers.end(); it++)
     {
-        if ((*it)->m_iState[NPlayer::DIRECTION] == NPlayer::RIGHT)
+        if ((*it)->m_iState[NPlayer::DIRECTION])
         {
-            sUpdate.push_back(NWorldMap::PLAYER);
-            sUpdate += (char)0;
-            sUpdate += (char)NPlayer::STATE;
-            sUpdate += (char)NPlayer::DIRECTION;
-            sUpdate += (char)0;
-            sUpdate += (char)NPlayer::POSITION;
-            std::cout << "x = " << std::to_string((*it)->m_vPosition.x) << " et y = " << std::to_string((*it)->m_vPosition.y) << std::endl;
+            switch((*it)->m_iState[NPlayer::DIRECTION])
+            {
+                case NPlayer::UP :
+                    (*it)->m_vPosition.y -= 3;
+                    break;
+                case NPlayer::RIGHT :
+                    (*it)->m_vPosition.x += 3;
+                    break;
+                case NPlayer::DOWN :
+                    (*it)->m_vPosition.y += 3;
+                    break;
+                case NPlayer::LEFT :
+                    (*it)->m_vPosition.x -= 3;
+                    break;
+                default :
+                    break;
+            }
+            mapQuery << NWorldMap::PLAYER << (int)std::distance(worldMap->m_vPlayers.begin(), it);
+            mapQuery << NPlayer::POSITION << (*it)->m_vPosition.x << (*it)->m_vPosition.y;
         }
     }
 
-    return sUpdate;
+    return mapQuery;
 }
 
