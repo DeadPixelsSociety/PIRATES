@@ -14,17 +14,13 @@ m_sName(name),
 m_vPosition(x, y),
 m_iState()
 {
-
+    for (int i = 0; i < NPlayer::NB_ITEMS; i++)
+        m_iState[i] = 0;
 }
 
 CPlayer::~CPlayer()
 {
 
-}
-
-void    CPlayer::clear()
-{
-    m_iState[NPlayer::DIRECTION] = 0;
 }
 
 int    CPlayer::update(CMapQuery &in)

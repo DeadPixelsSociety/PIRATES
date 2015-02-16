@@ -36,17 +36,10 @@ void  CWorldMap::removePlayer(std::string name)
   }
 }
 
-void    CWorldMap::clear()
-{
-    for(std::vector<CPlayer*>::iterator it = m_vPlayers.begin(); it != m_vPlayers.end(); it++)
-        (*it)->clear();
-}
-
 int    CWorldMap::update(CMapQuery &in)
 {
     int i;
 
-    clear();
     while (in >> i)
     {
         switch (i)

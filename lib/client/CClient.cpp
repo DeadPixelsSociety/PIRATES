@@ -79,7 +79,6 @@ void CClient::loopSocket()
         mapQuery.clear();
         if (m_socket.receive(mapQuery, ipServer, portServer) == sf::Socket::Done)
             m_worldMap.update(mapQuery);
-        sf::sleep(sf::milliseconds(50));
     }
 }
 
@@ -106,7 +105,7 @@ void    CClient::update()
     sf::Event   event;
 
     m_mapQuery << NWorldMap::PLAYER << m_idClient;
-    while (m_window.pollEvent(event))
+    while (m_window.pollEvent(event) && m_mapQuery.getDataSize() < 10)
     {
         switch(event.type)
         {

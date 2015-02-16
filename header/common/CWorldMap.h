@@ -50,7 +50,6 @@ class CWorldMap
         void    addPlayer(std::string name, int x, int y);
         void    removePlayer(std::string name);
         inline  CPlayer*    getPlayer(int in)   {return m_vPlayers[in];}
-        void    clear();
         int     update(CMapQuery &in);
 
     private :

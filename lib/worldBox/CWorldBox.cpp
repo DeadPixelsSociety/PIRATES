@@ -54,6 +54,7 @@ CMapQuery  CWorldBox::update(CWorldMap *worldMap, sf::Time elapsed)
                 default :
                     break;
             }
+            (*it)->m_iState[NPlayer::DIRECTION] = 0;
             mapQuery << NWorldMap::PLAYER << (int)std::distance(worldMap->m_vPlayers.begin(), it);
             mapQuery << NPlayer::POSITION << (*it)->m_vPosition.x << (*it)->m_vPosition.y;
         }

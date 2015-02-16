@@ -61,7 +61,6 @@ class CPlayer
     CPlayer(std::string name, int x, int y);
     ~CPlayer();
 
-    void    clear();
     int    update(CMapQuery &in);
 
     inline std::string getName()    {return m_sName;}
