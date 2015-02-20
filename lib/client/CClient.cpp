@@ -26,15 +26,13 @@
 #include <client/CClient.h>
 
 
-CClient::CClient(int windowWidth, int windowHeight, sf::String name) :
+CClient::CClient(sf::String name) :
 m_name(name),
-m_idClient(),
+m_id(),
 m_running(true),
 m_mapQuery(),
 m_worldMap(),
-m_pirate(50, 50),
-m_map(),
-m_window(sf::VideoMode(windowWidth, windowHeight), name),
+m_window()
 m_threadLoopSocket(&CClient::loopSocket, this),
 m_socket(),
 m_ipServer(SERVER_IP),
@@ -46,7 +44,7 @@ m_portServer(SERVER_PORT)
 }
 
 CClient::~CClient()
-{
+
     m_running = false;
 }
 
@@ -58,11 +56,11 @@ void CClient::connectServer()
     if (tcpSocket.connect(m_ipServer, m_portServer) == sf::Socket::Done
         && tcpSocket.receive(packet) == sf::Socket::Done)
     {
-        packet >> m_portServer >> m_idClient;
+        packet >> m_portServer >> m_id;
         m_socket.bind(sf::Socket::AnyPort);
         packet << m_socket.getLocalPort();
         tcpSocket.send(packet);
-        for (int i = 0; i < m_idClient; i++)
+        for (int i = 0; i < m_id; i++)
             m_worldMap.addPlayer(std::string("Player ") + std::to_string(i), 50, 50);
         m_worldMap.addPlayer(m_name, 50, 50);
     }
@@ -95,7 +93,7 @@ void CClient::loopGame()
         if (!m_window.isOpen())
             m_running = false;
 
-        render();
+        m_window.render();
         sf::sleep(sf::milliseconds(50));
     }
 }
@@ -104,7 +102,7 @@ void    CClient::update()
 {
     sf::Event   event;
 
-    m_mapQuery << NWorldMap::PLAYER << m_idClient;
+    m_mapQuery << NWorldMap::PLAYER << m_id;
     while (m_window.pollEvent(event) && m_mapQuery.getDataSize() < 10)
     {
         switch(event.type)
@@ -142,14 +140,6 @@ void    CClient::update()
                 break;
         }
     }
-}
-
-void CClient::render()
-{
-    m_map.render(m_window);
-    m_pirate.update(m_worldMap.getPlayer(m_idClient)->getPos());
-    m_pirate.render(m_window);
-    m_window.display();
 }
 
 

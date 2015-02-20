@@ -36,6 +36,8 @@
 
 #include <common/SFML.h>
 #include <common/CWorldMap.h>
+#include <client/CRenderWindow.h>
+#include <client/CController.h>
 
 
 #define SERVER_IP   "127.0.0.1"
@@ -48,7 +50,7 @@
 class CClient
 {
     public :
-        CClient(int windowWidth, int windowHeight, sf::String name);
+        CClient(std::string name);
         ~CClient();
 
         void    loopGame();
@@ -57,18 +59,16 @@ class CClient
         void    connectServer();
         void    loopSocket();
         void    update();
-        void    render();
 
         std::string         m_name;
-        int                 m_idClient;
+        int                 m_id;
         bool                m_running;
         CMapQuery           m_mapQuery;
 
         CWorldMap           m_worldMap;
-        CPirate             m_pirate;
-        CMap                m_map;
+        CRenderWindow       m_window;
+        CController         m_controller;
 
-        sf::RenderWindow    m_window;
         sf::Thread          m_threadLoopSocket;
         sf::UdpSocket       m_socket;
         sf::IpAddress       m_ipServer;

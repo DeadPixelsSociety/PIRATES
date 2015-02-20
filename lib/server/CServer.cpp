@@ -83,7 +83,7 @@ void  CServer::loopSocket()
             }
         }
 
-        sf::sleep(sf::milliseconds(50));
+        sf::sleep(sf::milliseconds(20));
     }
 }
 
@@ -103,7 +103,7 @@ void  CServer::loopGame()
         for (std::vector<SClient>::iterator it = m_vClients.begin(); it != m_vClients.end(); it++)
             it->pSocket->send(mapQuery, it->ip, it->port);
 
-        sf::sleep(sf::milliseconds(50));
+        sf::sleep(sf::milliseconds(20));
     }
 }
 
