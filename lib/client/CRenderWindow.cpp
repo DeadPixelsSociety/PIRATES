@@ -23,8 +23,11 @@ CRenderWindow::~CRenderWindow()
 
 void    CRenderWindow::update(CWorldMap& in)
 {
-    if (in.getVObjects().size() != m_vRenders.size())
+    if (in.getVObjects().size() > m_vRenders.size())
+    {
         m_vRenders.push_back(new CRenderPlayer(m_vTextures.back(), (CPlayer*)in.getVObjects().back()));
+        std::cout << "Création dun render player\n";
+    }
 
     for (std::vector<CRender*>::iterator it = m_vRenders.begin(); it != m_vRenders.end(); it++)
         (*it)->update();
@@ -35,5 +38,6 @@ void    CRenderWindow::render()
     clear(sf::Color::White);
     for (std::vector<CRender*>::iterator it = m_vRenders.begin(); it != m_vRenders.end(); it++)
         (*it)->render(this);
+    display();
 }
 

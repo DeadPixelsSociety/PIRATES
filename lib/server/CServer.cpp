@@ -65,7 +65,7 @@ void  CServer::loopSocket()
                     mapQuery << NWorldMap::Add << NWorldMap::Player << i << sf::Vector2f(0, 0) << "Player " + std::to_string(i);
                 client.send(mapQuery);
                 mapQuery.clear();
-                mapQuery << NWorldMap::Add << NWorldMap::Player << iNbPlayers << sf::Vector2f(50, 0) << "Player " + std::to_string(iNbPlayers);
+                mapQuery << NWorldMap::Add << NWorldMap::Player << iNbPlayers << sf::Vector2f(0, 0) << "Player " + std::to_string(iNbPlayers);
                 client.send(mapQuery);
                 client.disconnect();
                 m_worldMap.update(mapQuery);

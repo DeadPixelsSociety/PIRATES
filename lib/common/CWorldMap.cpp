@@ -35,6 +35,7 @@ int    CWorldMap::update(CMapQuery &in)
                 {
                     case NWorldMap::Player :
                         m_vObjects.push_back(new CPlayer(in.nextInt(), in.nextVector2f(), in.nextString()));
+                        std::cout << "Ajout du joueur " << ((CPlayer*)m_vObjects.back())->getName() << std::endl;
                         break;
                     default :
                         break;

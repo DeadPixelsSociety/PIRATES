@@ -78,7 +78,10 @@ void CClient::loopSocket()
     {
         mapQuery.clear();
         if (m_socket.receive(mapQuery, ipServer, portServer) == sf::Socket::Done)
+        {
             m_worldMap.update(mapQuery);
+            m_window.update(m_worldMap);
+        }
     }
 }
 
@@ -91,7 +94,7 @@ void CClient::loopGame()
             m_running = false;
 
         m_mapQuery.clear();
-        m_mapQuery << NWorldMap::Player << m_id;
+        m_mapQuery << NWorldMap::Update << m_id;
         CController::getInput(m_mapQuery);
 
         m_socket.send(m_mapQuery, m_ipServer, m_portServer);
