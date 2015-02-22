@@ -26,10 +26,7 @@
 
 int main (int argc, char **argv)
 {
-	const int windowHeight = 700;
-	const int windowWidth = 1000;
-
-	CClient client(windowWidth, windowHeight, "Joueur Alpha");
+	CClient client("Joueur Alpha");
 	client.loopGame();
 
     return 0;

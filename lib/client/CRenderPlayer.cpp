@@ -1,40 +1,39 @@
 #include <client/CRenderPlayer.h>
 
 
-CRenderPlayer::CRenderPlayer(std::string name, sf::Texture* in) : CRender(name, in)
+CRenderPlayer::CRenderPlayer(sf::Texture* in, CPlayer* player) :
+CRender(in),
+m_player(player)
 {
-    m_vSprites.push_back();
-    m_vSprites.back().setTexture(m_texture);
-    m_vSprites.push_back();
-    m_vSprites.back().setTexture(m_texture);
-    m_vSprites.push_back();
-    m_vSprites.back().setTexture(m_texture);
+    m_vSprites.push_back(sf::Sprite());
+    m_vSprites.back().setTexture(*m_texture);
+    m_vSprites.push_back(sf::Sprite());
+    m_vSprites.back().setTexture(*m_texture);
+    m_vSprites.push_back(sf::Sprite());
+    m_vSprites.back().setTexture(*m_texture);
 }
 
-CRenderPlayer::~CRenderPlayer()
-{
 
-}
-
-void    CRenderPlayer::update(CWorldMap &in)
+void    CRenderPlayer::update()
 {
-    switch (in.getPlayer(name)->getState(NPlayer::DIRECTION))
+    switch (m_player->getState(NPlayer::Direction))
     {
-        case NPlayer::UP :
-            m_sprite = m_vSprites[0];
+        case NPlayer::Up :
+            m_sprite = 0;
             break;
-        case NPlayer::LEFT :
-            m_sprite = m_vSprites[1];
+        case NPlayer::Left :
+            m_sprite = 1;
             break;
-        case NPlayer::DOWN :
-            m_sprite = m_vSprites[2];
+        case NPlayer::Down :
+            m_sprite = 2;
             break;
-        case NPlayer::RIGHT :
-            m_sprite = m_vSprites[3];
+        case NPlayer::Right :
+            m_sprite = 3;
             break;
         default :
             break;
     }
+    CRender::update(m_player->getPosition());
 }
 
 

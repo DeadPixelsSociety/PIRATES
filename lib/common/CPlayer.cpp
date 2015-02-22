@@ -9,18 +9,14 @@
 #include <common/CPlayer.h>
 
 
-CPlayer::CPlayer(std::string name, int x, int y) :
+CPlayer::CPlayer(int id, sf::Vector2f position, std::string name) :
+CMapObject(id),
+CPositionable(position),
 m_sName(name),
-m_vPosition(x, y),
 m_iState()
 {
-    for (int i = 0; i < NPlayer::NB_ITEMS; i++)
+    for (int i = 0; i < NPlayer::NbStates; i++)
         m_iState[i] = 0;
-}
-
-CPlayer::~CPlayer()
-{
-
 }
 
 int    CPlayer::update(CMapQuery &in)
@@ -30,11 +26,11 @@ int    CPlayer::update(CMapQuery &in)
     {
         switch (i)
         {
-            case NPlayer::POSITION :
-                in >> m_vPosition.x >> m_vPosition.y;
+            case NPlayer::Position :
+                in >> m_position;
                 break;
-            case NPlayer::STATE :
-                m_iState[in.next()] = in.next();
+            case NPlayer::State :
+                m_iState[in.nextInt()] = in.nextInt();
                 break;
             default :
                 return i;

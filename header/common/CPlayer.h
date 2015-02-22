@@ -15,61 +15,52 @@
 
 #include <common/SFML.h>
 #include <common/CWorldMap.h>
+#include <common/CPositionable.h>
+#include <common/CMapObject.h>
 
 
 namespace NPlayer
 {
     enum EUpdate
     {
-        NAME,
-        POSITION,
-        STATE
+        Name,
+        Position,
+        State
     };
 
     enum EState
     {
-        DIRECTION,
-        SPEED,
-        NB_ITEMS = 2
+        Direction,
+        Speed,
+        NbStates = 2
     };
 
     enum EDirection
     {
-        UP          = 1,
-        RIGHT       = 2,
-        DOWN        = 4,
-        LEFT        = 8,
-    };
-
-    enum ESpeed
-    {
-        STATIC,
-        WALK,
-        RUN,
-        SPRINT
+        Up          = 1,
+        Right       = 2,
+        Down        = 4,
+        Left        = 8,
     };
 }
 
 
 class CMapQuery;
 
-class CPlayer
+class CPlayer : public CMapObject, public CPositionable
 {
-    friend class CWorldBox;
-
   public :
-    CPlayer(std::string name, int x, int y);
-    ~CPlayer();
+    CPlayer(int id, sf::Vector2f position, std::string name);
 
     int    update(CMapQuery &in);
 
-    inline std::string getName()    {return m_sName;}
-    inline sf::Vector2<int> getPos()    {return m_vPosition;}
+    inline  std::string getName()    {return m_sName;}
+    inline  int         getState(int i) {return m_iState[i];}
+    inline  void        setState(int i, int in) {m_iState[i] = in;}
 
   private :
-    std::string         m_sName;
-    sf::Vector2<int>    m_vPosition;
-    int                 m_iState[NPlayer::NB_ITEMS];
+    std::string     m_sName;
+    int             m_iState[NPlayer::NbStates];
 };
 
 

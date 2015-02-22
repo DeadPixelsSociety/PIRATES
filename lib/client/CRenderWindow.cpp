@@ -1,15 +1,15 @@
 #include <client/CRenderWindow.h>
+#include <client/CRenderPlayer.h>
 
 
-CRenderWindow::CRenderWindow(int width, int height, sf::String name) :
-m_window(sf::VideoMode(width, height), name),
+CRenderWindow::CRenderWindow(std::string name) :
+sf::RenderWindow(sf::VideoMode(800, 600), name),
 m_vTextures(),
 m_vRenders()
 {
-    m_window.setFramerateLimit(30);
+    setFramerateLimit(30);
     m_vTextures.push_back(new sf::Texture());
     m_vTextures.back()->loadFromFile("../asset/image/violet.png");
-    m_vRenders.push_back(new CRenderPlayer(name), m_vTextures.back());
 }
 
 CRenderWindow::~CRenderWindow()
@@ -21,16 +21,19 @@ CRenderWindow::~CRenderWindow()
         delete (*it);
 }
 
-CRenderWindow::update(CWorldMap &in)
+void    CRenderWindow::update(CWorldMap& in)
 {
+    if (in.getVObjects().size() != m_vRenders.size())
+        m_vRenders.push_back(new CRenderPlayer(m_vTextures.back(), (CPlayer*)in.getVObjects().back()));
+
     for (std::vector<CRender*>::iterator it = m_vRenders.begin(); it != m_vRenders.end(); it++)
-        (*it)->update(in);
+        (*it)->update();
 }
 
-CRenderWindow::render()
+void    CRenderWindow::render()
 {
-    window.clear(sf::Color::White);
+    clear(sf::Color::White);
     for (std::vector<CRender*>::iterator it = m_vRenders.begin(); it != m_vRenders.end(); it++)
-        (*it)->draw(&m_window);
+        (*it)->render(this);
 }
 

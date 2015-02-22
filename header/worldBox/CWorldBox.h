@@ -12,12 +12,14 @@
 
 #include <Box2D/Box2D.h>
 #include <common/SFML.h>
-
-#include <common/CWorldMap.h>
+#include <common/CMapObject.h>
+#include <common/CMapQuery.h>
+#include <common/CPlayer.h>
 
 
 class CMapQuery;
-class CWorldMap;
+class CMapObject;
+class CPlayer;
 
 class CWorldBox
 {
@@ -25,9 +27,15 @@ class CWorldBox
     CWorldBox();
     ~CWorldBox();
 
-    CMapQuery  update(CWorldMap *worldMap, sf::Time elapsed);
+    CMapQuery   update(std::vector<CMapObject*>& vObject, sf::Time elapsed);
+    void        update(CPlayer* player);
+
 
   private :
+    CMapQuery   m_mapQuery;
+
+    sf::Time    m_elapsed;
+
     b2Vec2    m_gravity;
     b2World   m_world;
     b2Body*   m_pGroundBody;

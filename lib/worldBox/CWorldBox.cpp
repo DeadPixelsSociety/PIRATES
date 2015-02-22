@@ -11,6 +11,8 @@
 
 
 CWorldBox::CWorldBox() :
+m_mapQuery(),
+m_elapsed(),
 m_gravity(0.0f, -9.8f),
 m_world(m_gravity)
 {
@@ -29,37 +31,41 @@ CWorldBox::~CWorldBox()
 
 }
 
-CMapQuery  CWorldBox::update(CWorldMap *worldMap, sf::Time elapsed)
+CMapQuery  CWorldBox::update(std::vector<CMapObject*>& vObjects, sf::Time elapsed)
 {
-    CMapQuery mapQuery;
+    m_mapQuery.clear();
+    m_elapsed = elapsed;
 
-    for (std::vector<CPlayer*>::iterator it = worldMap->m_vPlayers.begin(); it != worldMap->m_vPlayers.end(); it++)
-    {
-        if ((*it)->m_iState[NPlayer::DIRECTION])
-        {
-            switch((*it)->m_iState[NPlayer::DIRECTION])
-            {
-                case NPlayer::UP :
-                    (*it)->m_vPosition.y -= 3;
-                    break;
-                case NPlayer::RIGHT :
-                    (*it)->m_vPosition.x += 3;
-                    break;
-                case NPlayer::DOWN :
-                    (*it)->m_vPosition.y += 3;
-                    break;
-                case NPlayer::LEFT :
-                    (*it)->m_vPosition.x -= 3;
-                    break;
-                default :
-                    break;
-            }
-            (*it)->m_iState[NPlayer::DIRECTION] = 0;
-            mapQuery << NWorldMap::PLAYER << (int)std::distance(worldMap->m_vPlayers.begin(), it);
-            mapQuery << NPlayer::POSITION << (*it)->m_vPosition.x << (*it)->m_vPosition.y;
-        }
-    }
+    for (std::vector<CMapObject*>::iterator it = vObjects.begin(); it != vObjects.end(); it++)
+        update((CPlayer*)*it);
 
-    return mapQuery;
+    return m_mapQuery;
 }
+
+void    CWorldBox::update(CPlayer* player)
+{
+    if (player->getState(NPlayer::Direction))
+    {
+        switch(player->getState(NPlayer::Direction))
+        {
+            case NPlayer::Up :
+                player->addPosY(-3);
+                break;
+            case NPlayer::Right :
+                player->addPosX(3);
+                break;
+            case NPlayer::Down :
+                player->addPosY(3);
+                break;
+            case NPlayer::Left :
+                player->addPosX(-3);
+                break;
+            default :
+                break;
+        }
+        player->setState(NPlayer::Direction, 0);
+        m_mapQuery << NWorldMap::Update << player->id() << NPlayer::Position << player->getPosition();
+    }
+}
+
 

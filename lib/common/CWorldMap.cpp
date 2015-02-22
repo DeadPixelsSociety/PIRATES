@@ -10,30 +10,15 @@
 
 
 CWorldMap::CWorldMap() :
-m_vPlayers()
+m_vObjects()
 {
 
 }
 
 CWorldMap::~CWorldMap()
 {
-  for (std::vector<CPlayer*>::iterator it = m_vPlayers.begin(); it != m_vPlayers.end(); it++)
+  for (std::vector<CMapObject*>::iterator it = m_vObjects.begin(); it != m_vObjects.end(); it++)
     free(*it);
-}
-
-
-void  CWorldMap::addPlayer(std::string name, int x, int y)
-{
-  m_vPlayers.push_back(new CPlayer(name, x, y));
-}
-
-void  CWorldMap::removePlayer(std::string name)
-{
-  for (std::vector<CPlayer*>::iterator it = m_vPlayers.begin(); it != m_vPlayers.end(); it++)
-  {
-    if ((*it)->getName() == name)
-      m_vPlayers.erase(it);
-  }
 }
 
 int    CWorldMap::update(CMapQuery &in)
@@ -44,8 +29,23 @@ int    CWorldMap::update(CMapQuery &in)
     {
         switch (i)
         {
-            case NWorldMap::PLAYER :
-                i = m_vPlayers[in.next()]->update(in);
+            case NWorldMap::Add :
+            {
+                switch(in.nextInt())
+                {
+                    case NWorldMap::Player :
+                        m_vObjects.push_back(new CPlayer(in.nextInt(), in.nextVector2f(), in.nextString()));
+                        break;
+                    default :
+                        break;
+                }
+                break;
+            }
+            case NWorldMap::Delete :
+                m_vObjects.erase(m_vObjects.begin() + in.nextInt());
+                break;
+            case NWorldMap::Update :
+                i = m_vObjects[in.nextInt()]->update(in);
                 break;
             default :
                 return i;

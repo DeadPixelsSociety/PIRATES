@@ -49,6 +49,7 @@ void  CServer::loopSocket()
             if (listener.accept(client) == sf::Socket::Done)
             {
                 listener.setBlocking(false);
+                mapQuery.clear();
                 port++;
                 m_vClients.push_back(SClient());
                 m_vClients.back().ip = client.getRemoteAddress();
@@ -60,8 +61,14 @@ void  CServer::loopSocket()
                 packet.clear();
                 client.receive(packet);
                 packet >> m_vClients.back().port;
+                for (int i = 0; i < iNbPlayers; i++)
+                    mapQuery << NWorldMap::Add << NWorldMap::Player << i << sf::Vector2f(0, 0) << "Player " + std::to_string(i);
+                client.send(mapQuery);
+                mapQuery.clear();
+                mapQuery << NWorldMap::Add << NWorldMap::Player << iNbPlayers << sf::Vector2f(50, 0) << "Player " + std::to_string(iNbPlayers);
+                client.send(mapQuery);
                 client.disconnect();
-                m_worldMap.addPlayer(std::string("Player ") + std::to_string(iNbPlayers), 50, 50);
+                m_worldMap.update(mapQuery);
                 iNbPlayers++;
             }
         }
@@ -97,7 +104,7 @@ void  CServer::loopGame()
         sf::Time elapsed = clock.restart();
         mapQuery.clear();
         m_mutex.lock();
-        mapQuery = m_worldBox.update(&m_worldMap, elapsed);
+        mapQuery = m_worldBox.update(m_worldMap.getVObjects(), elapsed);
         m_mutex.unlock();
 
         for (std::vector<SClient>::iterator it = m_vClients.begin(); it != m_vClients.end(); it++)

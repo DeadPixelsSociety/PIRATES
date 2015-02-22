@@ -6,20 +6,24 @@
 
 #include <common/SFML.h>
 #include <common/CWorldMap.h>
+#include <client/CRender.h>
 
 
-class CRenderWindow
+class CRender;
+
+
+class CRenderWindow : public sf::RenderWindow
 {
     public :
-        CRenderWindow(int width, int height, sf::String name);
-        ~CRenderWindow();
+                CRenderWindow(std::string name);
+                ~CRenderWindow();
 
-        void    update(CWorldMap &in);
+        void    update(CWorldMap& in);
         void    render();
 
     private :
-        sf::RenderWindow        m_window;
-        std::vector<CRender*>   m_vRenders;
+        std::vector<sf::Texture*>   m_vTextures;
+        std::vector<CRender*>       m_vRenders;
 };
 
 #endif

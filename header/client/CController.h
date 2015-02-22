@@ -3,21 +3,15 @@
 
 
 #include <common/SFML.h>
-#include <client/CRenderWindow.h>
+#include <common/CWorldMap.h>
+#include <common/CPlayer.h>
 
 
 class CController
 {
     public :
-        CController(sf::Input& input);
-        ~CController();
-
-        void    getEvent
-        void    process
-
-    private :
-        sf::Input*  m_input;
-}
+        static  void    getInput(CMapQuery& in);
+};
 
 
 #endif

@@ -10,17 +10,16 @@
 #include <common/CPlayer.h>
 
 
-class CRenderPlayer : CRender
+class CRenderPlayer : public CRender
 {
     public :
-        CRenderPlayer(std::string name, sf::Texture* in);
-        ~CRenderPlayer();
+        CRenderPlayer(sf::Texture* in, CPlayer* player);
 
-        void    update(CWorldMap &in);
+        virtual void    update();
 
     private :
-
-}
+        CPlayer*    m_player;
+};
 
 
 #endif

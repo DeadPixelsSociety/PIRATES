@@ -16,44 +16,40 @@
 #include <common/SFML.h>
 #include <common/CPlayer.h>
 #include <worldBox/CWorldBox.h>
+#include <common/CMapQuery.h>
 
 
 namespace NWorldMap
 {
     enum EUpdate
     {
-        PLAYER
+        Add,
+        Delete,
+        Update
+    };
+
+    enum EObject
+    {
+        Player
     };
 }
 
 
-class CMapQuery : public sf::Packet
-{
-    public :
-        inline  CMapQuery() : Packet()   {};
-        inline  ~CMapQuery()             {};
+class CMapObject;
 
-        inline  int next()  {int i; operator>>(i); return i;};
-};
-
-class CPlayer;
 
 class CWorldMap
 {
-    friend class CWorldBox;
-    friend class CClient;
-
     public :
         CWorldMap();
         ~CWorldMap();
 
-        void    addPlayer(std::string name, int x, int y);
-        void    removePlayer(std::string name);
-        inline  CPlayer*    getPlayer(int in)   {return m_vPlayers[in];}
         int     update(CMapQuery &in);
+        inline  CMapObject*    getObject(int id)   {return m_vObjects[id];}
+        inline  std::vector<CMapObject*>&   getVObjects()  {return m_vObjects;}
 
     private :
-        std::vector<CPlayer*> m_vPlayers;
+        std::vector<CMapObject*> m_vObjects;
 };
 
 
