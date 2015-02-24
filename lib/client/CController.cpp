@@ -3,14 +3,18 @@
 
 void    CController::getInput(CMapQuery& in)
 {
+    int i = 0;
+
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-        in << NPlayer::State << NPlayer::Direction << NPlayer::Up;
+        i += NPlayer::Up;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-        in << NPlayer::State << NPlayer::Direction << NPlayer::Right;
+        i += NPlayer::Right;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-        in << NPlayer::State << NPlayer::Direction << NPlayer::Down;
+        i += NPlayer::Down;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-        in << NPlayer::State << NPlayer::Direction << NPlayer::Left;
+        i += NPlayer::Left;
+
+    in << NPlayer::State << NPlayer::Direction << i;
 }
 
 

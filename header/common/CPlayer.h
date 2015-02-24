@@ -41,6 +41,10 @@ namespace NPlayer
         Right       = 2,
         Down        = 4,
         Left        = 8,
+        UpRight     = 3,
+        RightDown   = 6,
+        DownLeft    = 12,
+        LeftUp      = 9
     };
 }
 

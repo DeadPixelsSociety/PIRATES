@@ -60,6 +60,22 @@ void    CWorldBox::update(CPlayer* player)
             case NPlayer::Left :
                 player->addPosX(-3);
                 break;
+            case NPlayer::UpRight :
+                player->addPosY(-3);
+                player->addPosX(3);
+                break;
+            case NPlayer::RightDown :
+                player->addPosX(3);
+                player->addPosY(3);
+                break;
+            case NPlayer::DownLeft :
+                player->addPosY(3);
+                player->addPosX(-3);
+                break;
+            case NPlayer::LeftUp :
+                player->addPosX(-3);
+                player->addPosY(-3);
+                break;
             default :
                 break;
         }
