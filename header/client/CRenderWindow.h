@@ -2,10 +2,10 @@
 #define CRENDERWINDOW_H
 
 
-#include <vector>
+#include <map>
 
 #include <common/SFML.h>
-#include <common/CWorldMap.h>
+#include <common/CMapObject.h>
 #include <client/CRender.h>
 
 
@@ -18,12 +18,12 @@ class CRenderWindow : public sf::RenderWindow
                 CRenderWindow(std::string name);
                 ~CRenderWindow();
 
-        void    update(CWorldMap& in);
+        void    update(std::vector<CMapObject*>& in);
         void    render();
 
     private :
         std::vector<sf::Texture*>   m_vTextures;
-        std::vector<CRender*>       m_vRenders;
+        std::map<int, CRender*>     m_mRenders;
 };
 
 #endif

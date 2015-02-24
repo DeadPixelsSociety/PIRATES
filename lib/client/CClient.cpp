@@ -50,20 +50,24 @@ CClient::~CClient()
 void CClient::connectServer()
 {
     sf::TcpSocket   tcpSocket;
-    sf::Packet      packet;
     CMapQuery       mapQuery;
 
     if (tcpSocket.connect(m_ipServer, m_portServer) == sf::Socket::Done
-        && tcpSocket.receive(packet) == sf::Socket::Done)
+        && tcpSocket.receive(mapQuery) == sf::Socket::Done)
     {
-        packet >> m_portServer >> m_id;
+        mapQuery >> m_portServer >> m_id;
         m_socket.bind(sf::Socket::AnyPort);
-        packet << m_socket.getLocalPort();
-        tcpSocket.send(packet);
-        tcpSocket.receive(mapQuery);
-        m_worldMap.update(mapQuery);
+
+        mapQuery.clear();
+        mapQuery << m_socket.getLocalPort();
+        tcpSocket.send(mapQuery);
+
         mapQuery.clear();
         tcpSocket.receive(mapQuery);
+        m_worldMap.update(mapQuery);
+
+        mapQuery.clear();
+        m_socket.receive(mapQuery, m_ipServer, m_portServer);
         m_worldMap.update(mapQuery);
     }
 }
@@ -80,7 +84,7 @@ void CClient::loopSocket()
         if (m_socket.receive(mapQuery, ipServer, portServer) == sf::Socket::Done)
         {
             m_worldMap.update(mapQuery);
-            m_window.update(m_worldMap);
+            m_window.update(m_worldMap.getVObjects());
         }
     }
 }

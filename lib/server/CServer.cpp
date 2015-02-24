@@ -35,7 +35,6 @@ void  CServer::loopSocket()
     sf::TcpSocket       client;
     sf::SocketSelector  socketSelector;
     unsigned short      port = SERVER_PORT;
-    sf::Packet          packet;
     CMapQuery           mapQuery;
     int                 iNbPlayers = 0;
 
@@ -49,26 +48,33 @@ void  CServer::loopSocket()
             if (listener.accept(client) == sf::Socket::Done)
             {
                 listener.setBlocking(false);
-                mapQuery.clear();
                 port++;
                 m_vClients.push_back(SClient());
                 m_vClients.back().ip = client.getRemoteAddress();
                 m_vClients.back().pSocket = new sf::UdpSocket();
                 m_vClients.back().pSocket->bind(port);
                 socketSelector.add(*(m_vClients.back().pSocket));
-                packet << port << iNbPlayers;
-                client.send(packet);
-                packet.clear();
-                client.receive(packet);
-                packet >> m_vClients.back().port;
+
+                mapQuery.clear();
+                mapQuery << port << iNbPlayers;
+                client.send(mapQuery);
+
+                mapQuery.clear();
+                client.receive(mapQuery);
+                mapQuery >> m_vClients.back().port;
+
+                mapQuery.clear();
                 for (int i = 0; i < iNbPlayers; i++)
                     mapQuery << NWorldMap::Add << NWorldMap::Player << i << sf::Vector2f(0, 0) << "Player " + std::to_string(i);
                 client.send(mapQuery);
+                client.disconnect();
+
                 mapQuery.clear();
                 mapQuery << NWorldMap::Add << NWorldMap::Player << iNbPlayers << sf::Vector2f(0, 0) << "Player " + std::to_string(iNbPlayers);
-                client.send(mapQuery);
-                client.disconnect();
+                for (std::vector<SClient>::iterator it = m_vClients.begin(); it != m_vClients.end(); it++)
+                    it->pSocket->send(mapQuery, it->ip, it->port);
                 m_worldMap.update(mapQuery);
+
                 iNbPlayers++;
             }
         }

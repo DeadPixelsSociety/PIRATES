@@ -5,7 +5,7 @@
 CRenderWindow::CRenderWindow(std::string name) :
 sf::RenderWindow(sf::VideoMode(800, 600), name),
 m_vTextures(),
-m_vRenders()
+m_mRenders()
 {
     setFramerateLimit(30);
     m_vTextures.push_back(new sf::Texture());
@@ -14,30 +14,30 @@ m_vRenders()
 
 CRenderWindow::~CRenderWindow()
 {
-    for (std::vector<CRender*>::iterator it = m_vRenders.begin(); it != m_vRenders.end(); it++)
-        delete (*it);
+    for (std::map<int, CRender*>::iterator it = m_mRenders.begin(); it != m_mRenders.end(); it++)
+        delete it->second;
 
     for (std::vector<sf::Texture*>::iterator it = m_vTextures.begin(); it != m_vTextures.end(); it++)
         delete (*it);
 }
 
-void    CRenderWindow::update(CWorldMap& in)
+void    CRenderWindow::update(std::vector<CMapObject*>& vObjects)
 {
-    if (in.getVObjects().size() > m_vRenders.size())
+    for (std::vector<CMapObject*>::iterator it = vObjects.begin(); it != vObjects.end(); it++)
     {
-        m_vRenders.push_back(new CRenderPlayer(m_vTextures.back(), (CPlayer*)in.getVObjects().back()));
-        std::cout << "Création dun render player\n";
+        if (m_mRenders.find((*it)->id()) == m_mRenders.end())
+            m_mRenders[(*it)->id()] = new CRenderPlayer(m_vTextures.back(), (CPlayer*)(*it));
     }
 
-    for (std::vector<CRender*>::iterator it = m_vRenders.begin(); it != m_vRenders.end(); it++)
-        (*it)->update();
+    for (std::map<int, CRender*>::iterator it = m_mRenders.begin(); it != m_mRenders.end(); it++)
+        it->second->update();
 }
 
 void    CRenderWindow::render()
 {
     clear(sf::Color::White);
-    for (std::vector<CRender*>::iterator it = m_vRenders.begin(); it != m_vRenders.end(); it++)
-        (*it)->render(this);
+    for (std::map<int, CRender*>::iterator it = m_mRenders.begin(); it != m_mRenders.end(); it++)
+        it->second->render(this);
     display();
 }
 
