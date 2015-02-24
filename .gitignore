@@ -6,4 +6,5 @@ Makefile
 
 *.cmake
 *.so*
+*.a*
 
