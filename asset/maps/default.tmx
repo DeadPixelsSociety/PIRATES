@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="left-up" width="20" height="20" tilewidth="16" tileheight="16" nextobjectid="1">
+ <tileset firstgid="1" name="default" tilewidth="16" tileheight="16" margin="16">
+  <image source="../images/default.png" width="400" height="224"/>
+ </tileset>
+ <layer name="Background" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJy7xMDAcGkA8C4k9mUcbFyYGDWkmoHPTGxyu0i0bzeZ/qCGX3G5nVyzydG3Gweb0jAk5MbdaHwYTWr8URrWtI5TQuFEbvrDFobkpgl6hTmpduJyO7nplFT70PmE0gyt3EUOBgCf4Uaf
+  </data>
+ </layer>
+ <layer name="Chemins" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2B4gz1AfA2Kd45Q85YC8WsceBkZ5u3Bo56QHwaTedjC4w2SeS+RxHABmJrXSPpGCgYAolNf6g==
+  </data>
+ </layer>
+ <layer name="Decorations" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2DwgbtQTC3wFYrRwVwgngfF84kw5zcB+a1I7O3EOQ0vOMuAcN95Kpg33MBfMvTMJlMfLrCZimYNNQAAcwUOpA==
+  </data>
+ </layer>
+ <layer name="Solids" width="20" height="20">
+  <properties>
+   <property name="solid" value="1"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztzjdKBWEYBdBnXIEBY2fEgOHZGTFg7IwYMHZGDOswoS7DZbgERRSXoIVo5xFeMcjMFG8qxQun+X7mzk2lfk9OOeOcCy654pqbLPpuySGXPPIpoDDzFkwRxZRQGtF3RxnlVFBJFdUhfU0000JrzL422umgkzRdmX8FM8gQw4zE9I0yxjgTTDIVsm+RJZZZiej73rDKGutssMlWyL5DjjjmJKLvngceA7cnnnmJ+CYur7zxGbi98/Hj9p/sUkMtddTTQGOCvm566KWPfgYS9E0zwyxzzLOQoG+bHXbZY5+DBH1/IV/bzSlt
+  </data>
+ </layer>
+</map>
