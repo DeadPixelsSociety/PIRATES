@@ -1,0 +1,12 @@
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: boost
+Description :
+URL :
+Version: 1.57
+Requires :
+Libs : -L${libdir} -lboost_iostreams -lboost_regex
+Cflags: -I${includedir}

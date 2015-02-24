@@ -4,12 +4,14 @@
 
 CRenderWindow::CRenderWindow(std::string name) :
 sf::RenderWindow(sf::VideoMode(800, 600), name),
+m_mapView(sf::FloatRect(0, 0, 800, 600)),
+m_tileMap("../asset/maps/default.tmx"),
 m_vTextures(),
 m_mRenders()
 {
     setFramerateLimit(30);
     m_vTextures.push_back(new sf::Texture());
-    m_vTextures.back()->loadFromFile("../asset/image/violet.png");
+    m_vTextures.back()->loadFromFile("../asset/images/violet.png");
 }
 
 CRenderWindow::~CRenderWindow()
@@ -36,6 +38,7 @@ void    CRenderWindow::update(std::vector<CMapObject*>& vObjects)
 void    CRenderWindow::render()
 {
     clear(sf::Color::White);
+    draw(m_tileMap);
     for (std::map<int, CRender*>::iterator it = m_mRenders.begin(); it != m_mRenders.end(); it++)
         it->second->render(this);
     display();

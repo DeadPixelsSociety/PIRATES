@@ -10,6 +10,7 @@ add_definitions(-Wall -std=c++11)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(SFML2 REQUIRED sfml-graphics>=2.1 sfml-audio>=2.1 sfml-network>=2.1)
 pkg_check_modules(BOX2D REQUIRED box2d>=2.3)
+pkg_check_modules(LIBTMX   REQUIRED libtmx>=0.1)
 
 add_subdirectory(lib)
 

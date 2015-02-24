@@ -1,0 +1,12 @@
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libtmx
+Description : Parsing tilemap from Tiled editor
+URL : http://github.com/aquemy/TMXLib
+Version: 0.1
+Requires : boost
+Libs : -L${libdir} -ltmx
+Cflags: -I${includedir}

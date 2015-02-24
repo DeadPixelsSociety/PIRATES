@@ -31,13 +31,25 @@ Developper install
         cd PIRATES/
         cp doc/box2d.pc /usr/lib/pkgconfig/
 
-4. Configure
+4. install TMXLib :
+    - Download the git repository :
+        git clone http://github.com/aquemy/TMXLib
+    - Build the library :
+        cd TMXLib
+        mkdir build
+        cd build
+        cmake ..
+        make
+    - Install in your system
+        make install
+
+5. Configure
     - use cmake with your IDE type as argument
         cmake . -G "Unix Makefiles"
     - if you have pkgconfig error, then you have not install correctly libraries
 
-5. Compile
-    - make server or make client
+6. Compile
+    - make server or make clienti or just make for both
 
 
 Install
