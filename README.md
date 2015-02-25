@@ -32,6 +32,9 @@ Developper install
         cp doc/box2d.pc /usr/lib/pkgconfig/
 
 4. install TMXLib :
+    - Download and install boost library
+    - copy the pkgconfig file :
+        cp doc/boost.pc /usr/lib/pkgconfig/
     - Download the git repository :
         git clone http://github.com/aquemy/TMXLib
     - Build the library :
@@ -42,6 +45,8 @@ Developper install
         make
     - Install in your system
         make install
+    - copy the pkgconfig file :
+        cp doc/libtmx.pc /usr/lib/pkgconfig/
 
 5. Configure
     - use cmake with your IDE type as argument
@@ -49,7 +54,7 @@ Developper install
     - if you have pkgconfig error, then you have not install correctly libraries
 
 6. Compile
-    - make server or make clienti or just make for both
+    - make server or make client or just make for both
 
 
 Install

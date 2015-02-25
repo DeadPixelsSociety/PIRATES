@@ -104,7 +104,7 @@ void CClient::loopGame()
         m_socket.send(m_mapQuery, m_ipServer, m_portServer);
 
         m_window.render();
-        sf::sleep(sf::milliseconds(50));
+        sf::sleep(sf::milliseconds(20));
     }
 }
 
@@ -133,6 +133,9 @@ void    CClient::getEvent()
                 }
                 break;
             }
+            case sf::Event::Resized :
+                m_window.setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
+                break;
             default :
                 break;
         }

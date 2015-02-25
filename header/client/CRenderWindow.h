@@ -23,7 +23,6 @@ class CRenderWindow : public sf::RenderWindow
         void    render();
 
     private :
-        sf::View                    m_mapView;
         CTileMap                    m_tileMap;
 
         std::vector<sf::Texture*>   m_vTextures;

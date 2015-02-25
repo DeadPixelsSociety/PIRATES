@@ -49,32 +49,32 @@ void    CWorldBox::update(CPlayer* player)
         switch(player->getState(NPlayer::Direction))
         {
             case NPlayer::Up :
-                player->addPosY(-3);
+                player->addPosY(-10);
                 break;
             case NPlayer::Right :
-                player->addPosX(3);
+                player->addPosX(10);
                 break;
             case NPlayer::Down :
-                player->addPosY(3);
+                player->addPosY(10);
                 break;
             case NPlayer::Left :
-                player->addPosX(-3);
+                player->addPosX(-10);
                 break;
             case NPlayer::UpRight :
-                player->addPosY(-3);
-                player->addPosX(3);
+                player->addPosY(-10);
+                player->addPosX(10);
                 break;
             case NPlayer::RightDown :
-                player->addPosX(3);
-                player->addPosY(3);
+                player->addPosX(10);
+                player->addPosY(10);
                 break;
             case NPlayer::DownLeft :
-                player->addPosY(3);
-                player->addPosX(-3);
+                player->addPosY(10);
+                player->addPosX(-10);
                 break;
             case NPlayer::LeftUp :
-                player->addPosX(-3);
-                player->addPosY(-3);
+                player->addPosX(-10);
+                player->addPosY(-10);
                 break;
             default :
                 break;

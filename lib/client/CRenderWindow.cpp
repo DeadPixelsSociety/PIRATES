@@ -4,12 +4,11 @@
 
 CRenderWindow::CRenderWindow(std::string name) :
 sf::RenderWindow(sf::VideoMode(800, 600), name),
-m_mapView(sf::FloatRect(0, 0, 800, 600)),
-m_tileMap("../asset/maps/default.tmx"),
+m_tileMap("../asset/maps/map.tmx"),
 m_vTextures(),
 m_mRenders()
 {
-    setFramerateLimit(30);
+    setFramerateLimit(60);
     m_vTextures.push_back(new sf::Texture());
     m_vTextures.back()->loadFromFile("../asset/images/violet.png");
 }
