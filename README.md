@@ -48,6 +48,13 @@ Developper install
     - copy the pkgconfig file :
         cp doc/libtmx.pc /usr/lib/pkgconfig/
 
+5. install Thor library :
+    - git clone http://github.com/Bromeon/Thor
+    - cp doc/thor.pc /usr/lib/pkgconfig/
+    - cd Thor; make . -G "Unix Makefiles"; make; make install
+    If you have a problem a the execution of client, you have to do this :
+        echo "/usr/local/lib" > /etc/ld.so.conf.d/locale.conf; ldconfig
+
 5. Configure
     - use cmake with your IDE type as argument
         cmake . -G "Unix Makefiles"

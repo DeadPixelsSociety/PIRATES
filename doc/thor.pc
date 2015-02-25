@@ -1,0 +1,12 @@
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name : thor
+Description : library for addons in SFML
+URL : http://github.com/Bromeon/Thor
+Version : 2.0
+Requires : sfml-graphics
+Libs : -L${libdir} -lthor
+Cflags : -I${includedir}

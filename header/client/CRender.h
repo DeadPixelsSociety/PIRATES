@@ -22,10 +22,14 @@ class CRender
         virtual void    update(sf::Vector2f in);
         virtual void    render(CRenderWindow* in);
 
+                void    makeRects(int nbTile, int tileWidth, int tileHeight);
+
     protected :
-        sf::Texture*            m_texture;
-        std::vector<sf::Sprite> m_vSprites;
-        int                     m_sprite;
+        sf::Texture*                m_texture;
+        sf::Sprite                  m_sprite;
+        std::vector<sf::IntRect>    m_vRects;
+        int                         m_rect;
+
 };
 
 #endif

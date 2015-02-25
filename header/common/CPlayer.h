@@ -38,13 +38,13 @@ namespace NPlayer
     enum EDirection
     {
         Up          = 1,
-        Right       = 2,
-        Down        = 4,
-        Left        = 8,
-        UpRight     = 3,
-        RightDown   = 6,
-        DownLeft    = 12,
-        LeftUp      = 9
+        Right,
+        Down,
+        Left,
+        UpRight,
+        RightDown,
+        DownLeft,
+        LeftUp
     };
 }
 

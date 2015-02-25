@@ -1,7 +1,7 @@
 //
 //  @ Project : PIRATES
 //  @ File Name : CWorldBox.cpp
-//  @ Date : 20/10/2014
+//  @ Date : 20/5/2014
 //  @ Author : Romain
 //
 
@@ -22,7 +22,7 @@ m_world(m_gravity)
 
   groundBodyDef.position.Set(0.0f, -9.8f);
   m_pGroundBody = m_world.CreateBody(&groundBodyDef);
-  groundBox.SetAsBox(100.0f, 100.0f);   // Half-width and Half-height
+  groundBox.SetAsBox(50.0f, 50.0f);   // Half-width and Half-height
   m_pGroundBody->CreateFixture(&groundBox, 0.0f);
 }
 
@@ -49,32 +49,32 @@ void    CWorldBox::update(CPlayer* player)
         switch(player->getState(NPlayer::Direction))
         {
             case NPlayer::Up :
-                player->addPosY(-10);
+                player->addPosY(-5);
                 break;
             case NPlayer::Right :
-                player->addPosX(10);
+                player->addPosX(5);
                 break;
             case NPlayer::Down :
-                player->addPosY(10);
+                player->addPosY(5);
                 break;
             case NPlayer::Left :
-                player->addPosX(-10);
+                player->addPosX(-5);
                 break;
             case NPlayer::UpRight :
-                player->addPosY(-10);
-                player->addPosX(10);
+                player->addPosY(-5);
+                player->addPosX(5);
                 break;
             case NPlayer::RightDown :
-                player->addPosX(10);
-                player->addPosY(10);
+                player->addPosX(5);
+                player->addPosY(5);
                 break;
             case NPlayer::DownLeft :
-                player->addPosY(10);
-                player->addPosX(-10);
+                player->addPosY(5);
+                player->addPosX(-5);
                 break;
             case NPlayer::LeftUp :
-                player->addPosX(-10);
-                player->addPosY(-10);
+                player->addPosX(-5);
+                player->addPosY(-5);
                 break;
             default :
                 break;
