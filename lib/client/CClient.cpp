@@ -102,6 +102,7 @@ void CClient::loopGame()
         CController::getInput(m_mapQuery);
 
         m_socket.send(m_mapQuery, m_ipServer, m_portServer);
+        m_worldMap.update(m_mapQuery);
 
         m_window.render();
         sf::sleep(sf::milliseconds(20));

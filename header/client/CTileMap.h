@@ -3,7 +3,6 @@
 
 
 #include <vector>
-#include <iostream>
 
 #include <common/SFML.h>
 #include <common/TMX.h>

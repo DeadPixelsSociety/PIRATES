@@ -10,7 +10,7 @@ m_mRenders()
 {
     setFramerateLimit(60);
     m_vTextures.push_back(new sf::Texture());
-    m_vTextures.back()->loadFromFile("../asset/images/violet.png");
+    m_vTextures.back()->loadFromFile("../asset/images/Player.png");
 }
 
 CRenderWindow::~CRenderWindow()
