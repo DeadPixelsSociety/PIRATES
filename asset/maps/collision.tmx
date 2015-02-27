@@ -2113,9 +2113,6 @@
   </data>
  </layer>
  <layer name="Calque 3" width="35" height="30">
-  <properties>
-   <property name="collision" value=""/>
-  </properties>
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -3170,6 +3167,9 @@
   </data>
  </layer>
  <layer name="Calque 4" width="35" height="30">
+  <properties>
+   <property name="collision" value=""/>
+  </properties>
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -4224,6 +4224,9 @@
   </data>
  </layer>
  <layer name="Calque 6" width="35" height="30">
+  <properties>
+   <property name="collision" value=""/>
+  </properties>
   <data>
    <tile gid="0"/>
    <tile gid="0"/>

@@ -4,7 +4,7 @@
 
 CRenderWindow::CRenderWindow(std::string name) :
 sf::RenderWindow(sf::VideoMode(800, 600), name),
-m_tileMap("../asset/maps/map.tmx"),
+m_tileMap("../asset/maps/collision.tmx"),
 m_vTextures(),
 m_mRenders()
 {
@@ -26,8 +26,8 @@ void    CRenderWindow::update(std::vector<CMapObject*>& vObjects)
 {
     for (std::vector<CMapObject*>::iterator it = vObjects.begin(); it != vObjects.end(); it++)
     {
-        if (m_mRenders.find((*it)->id()) == m_mRenders.end())
-            m_mRenders[(*it)->id()] = new CRenderPlayer(m_vTextures.back(), (CPlayer*)(*it));
+        if (m_mRenders.find((*it)->getId()) == m_mRenders.end())
+            m_mRenders[(*it)->getId()] = new CRenderPlayer(m_vTextures.back(), (CPlayer*)(*it));
     }
 
     for (std::map<int, CRender*>::iterator it = m_mRenders.begin(); it != m_mRenders.end(); it++)

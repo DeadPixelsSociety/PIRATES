@@ -2113,9 +2113,6 @@
   </data>
  </layer>
  <layer name="Calque 3" width="35" height="30">
-  <properties>
-   <property name="collision" value=""/>
-  </properties>
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -6331,4 +6328,12 @@
    <tile gid="0"/>
   </data>
  </layer>
+ <objectgroup name="Calque d'objets 1" width="35" height="30">
+  <object gid="281" x="176" y="225"/>
+  <object gid="289" x="176" y="257"/>
+  <object gid="290" x="208" y="257"/>
+  <object gid="283" x="240" y="225"/>
+  <object gid="291" x="240" y="257"/>
+  <object gid="282" x="208" y="225"/>
+ </objectgroup>
 </map>

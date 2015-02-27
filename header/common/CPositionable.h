@@ -14,8 +14,6 @@ class CPositionable
         inline  void            setPosition(sf::Vector2f in)    {m_position = in;}
         inline  void            setPosX(float in)               {m_position.x = in;}
         inline  void            setPosY(float in)               {m_position.y = in;}
-        inline  void            addPosX(float in)               {m_position.x += in;}
-        inline  void            addPosY(float in)               {m_position.y += in;}
 
     protected :
         sf::Vector2f    m_position;

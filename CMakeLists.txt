@@ -23,7 +23,7 @@ file(GLOB_RECURSE HEADERS "header/*")
 add_executable(server ${SRC_SRV} ${SRC_CMN} ${HEADERS})
 add_executable(client ${SRC_CLT} ${SRC_CMN} ${HEADERS})
 
-target_link_libraries(server libWorldBox libServer libCommon)
+target_link_libraries(server libServer libCommon)
 target_link_libraries(client libClient libCommon)
 
 

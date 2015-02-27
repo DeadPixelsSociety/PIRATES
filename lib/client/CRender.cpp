@@ -25,7 +25,7 @@ void    CRender::update()
 
 void    CRender::update(sf::Vector2f in)
 {
-    m_sprite.setPosition(in);
+    m_sprite.setPosition(sf::Vector2f(in.x - m_vRects[m_rect].width / 2, in.y - m_vRects[m_rect].height / 2));
 }
 
 void    CRender::render(CRenderWindow* in)

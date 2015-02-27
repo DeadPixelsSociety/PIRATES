@@ -12,7 +12,7 @@ class CMapObject
 
         inline  virtual int    update(CMapQuery& in)   {return 0;}
 
-        inline  const int&  id() const    {return m_id;}
+        inline  const int&  getId() const    {return m_id;}
 
     protected :
         int     m_id;

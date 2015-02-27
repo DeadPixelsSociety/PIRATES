@@ -14,7 +14,7 @@ m_iNbMaxPlayers(nbMaxPlayers),
 m_threadLoopSocket(&CServer::loopSocket, this),
 m_mutex(),
 m_worldMap(),
-m_worldBox(),
+m_worldBox("../asset/maps/collision.tmx"),
 m_vClients(),
 m_running(true)
 {

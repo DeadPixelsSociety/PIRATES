@@ -12,9 +12,13 @@
 
 #include <Box2D/Box2D.h>
 #include <common/SFML.h>
+#include <common/TMX.h>
 #include <common/CMapObject.h>
 #include <common/CMapQuery.h>
 #include <common/CPlayer.h>
+
+
+#define SCALING 30.f
 
 
 class CMapQuery;
@@ -24,7 +28,7 @@ class CPlayer;
 class CWorldBox
 {
   public :
-    CWorldBox();
+    CWorldBox(const std::string& tmxFile);
     ~CWorldBox();
 
     CMapQuery   update(std::vector<CMapObject*>& vObject, sf::Time elapsed);
@@ -32,13 +36,14 @@ class CWorldBox
 
 
   private :
+    tmx::Map    m_map;
     CMapQuery   m_mapQuery;
 
     sf::Time    m_elapsed;
 
-    b2Vec2    m_gravity;
     b2World   m_world;
-    b2Body*   m_pGroundBody;
+
+    std::map<int, b2Body*>  m_mBodyObjects;
 };
 
 

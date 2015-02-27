@@ -16,7 +16,7 @@
 
 #include <common/SFML.h>
 #include <common/CWorldMap.h>
-#include <worldBox/CWorldBox.h>
+#include <server/CWorldBox.h>
 
 
 #define SERVER_PORT 56747

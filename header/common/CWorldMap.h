@@ -15,7 +15,6 @@
 
 #include <common/SFML.h>
 #include <common/CPlayer.h>
-#include <worldBox/CWorldBox.h>
 #include <common/CMapQuery.h>
 
 
