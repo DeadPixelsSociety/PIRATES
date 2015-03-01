@@ -37,10 +37,6 @@
 #include <client/CController.h>
 
 
-#define SERVER_IP   "127.0.0.1"
-#define SERVER_PORT 56747
-
-
 class CClient
 {
     public :
@@ -64,8 +60,6 @@ class CClient
 
         sf::Thread          m_threadLoopSocket;
         sf::UdpSocket       m_socket;
-        sf::IpAddress       m_ipServer;
-        unsigned short      m_portServer;
 };
 
 

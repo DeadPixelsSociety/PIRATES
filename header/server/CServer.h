@@ -1,16 +1,8 @@
-//
-//  @ Project : PIRATES
-//  @ File Name : CServer.h
-//  @ Date : 20/10/2014
-//  @ Author :
-//
-
-
 #ifndef CSERVER_H
 #define CSERVER_H
 
 
-#include <vector>
+#include <map>
 #include <iostream>
 #include <string>
 
@@ -19,14 +11,15 @@
 #include <server/CWorldBox.h>
 
 
-#define SERVER_PORT 56747
+#define PERIOD          20
+#define PING_TIMEOUT    5
 
 
 struct SClient
 {
-    sf::UdpSocket*  pSocket;
+    sf::UdpSocket   socket;
     sf::IpAddress   ip;
-    unsigned short  port;
+    sf::Clock       ping;
 };
 
 
@@ -40,16 +33,17 @@ class CServer
 
     private :
         void    loopSocket();
+        void    sendClients(CMapQuery& in);
+        void    deleteClient(int id);
 
-        int m_iNbMaxPlayers;
+        int m_nbMaxPlayers;
 
         sf::Thread      m_threadLoopSocket;
-        sf::Mutex       m_mutex;
 
         CWorldMap       m_worldMap;
         CWorldBox       m_worldBox;
 
-        std::vector<SClient>    m_vClients;
+        std::map<int, SClient*>    m_mClients;
 
         bool  m_running;
 };

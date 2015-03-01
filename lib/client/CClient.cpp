@@ -26,6 +26,11 @@
 #include <client/CClient.h>
 
 
+sf::IpAddress   serverIp = "127.0.0.1";
+unsigned short  tcpPort = 56747;
+unsigned short  udpPort = 56666;
+
+
 CClient::CClient(std::string name) :
 m_name(name),
 m_id(),
@@ -34,9 +39,7 @@ m_mapQuery(),
 m_worldMap(),
 m_window(m_name),
 m_threadLoopSocket(&CClient::loopSocket, this),
-m_socket(),
-m_ipServer(SERVER_IP),
-m_portServer(SERVER_PORT)
+m_socket()
 {
     connectServer();
     m_threadLoopSocket.launch();
@@ -52,22 +55,18 @@ void CClient::connectServer()
     sf::TcpSocket   tcpSocket;
     CMapQuery       mapQuery;
 
-    if (tcpSocket.connect(m_ipServer, m_portServer) == sf::Socket::Done
+    if (tcpSocket.connect(serverIp, tcpPort) == sf::Socket::Done
         && tcpSocket.receive(mapQuery) == sf::Socket::Done)
     {
-        mapQuery >> m_portServer >> m_id;
-        m_socket.bind(sf::Socket::AnyPort);
-
-        mapQuery.clear();
-        mapQuery << m_socket.getLocalPort();
-        tcpSocket.send(mapQuery);
+        mapQuery >> m_id;
+        m_socket.bind(udpPort);
 
         mapQuery.clear();
         tcpSocket.receive(mapQuery);
         m_worldMap.update(mapQuery);
 
         mapQuery.clear();
-        m_socket.receive(mapQuery, m_ipServer, m_portServer);
+        m_socket.receive(mapQuery, serverIp, udpPort);
         m_worldMap.update(mapQuery);
     }
 }
@@ -75,13 +74,11 @@ void CClient::connectServer()
 void CClient::loopSocket()
 {
     CMapQuery       mapQuery;
-    sf::IpAddress   ipServer = m_ipServer;
-    unsigned short  portServer = m_portServer;
 
     while (m_running)
     {
         mapQuery.clear();
-        if (m_socket.receive(mapQuery, ipServer, portServer) == sf::Socket::Done)
+        if (m_socket.receive(mapQuery, serverIp, udpPort) == sf::Socket::Done)
         {
             m_worldMap.update(mapQuery);
             m_window.update(m_worldMap.getVObjects());
@@ -101,7 +98,7 @@ void CClient::loopGame()
         m_mapQuery << NWorldMap::Update << m_id;
         CController::getInput(m_mapQuery);
 
-        m_socket.send(m_mapQuery, m_ipServer, m_portServer);
+        m_socket.send(m_mapQuery, serverIp, udpPort);
         m_worldMap.update(m_mapQuery);
 
         m_window.render();

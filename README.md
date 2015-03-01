@@ -17,24 +17,23 @@ Developper install
 3. Install Box2D library :
     - Download the archive (outside the git folder) :
         wget http://box2d.googlecode.com/files/Box2D_v2.3.0.7z
-    - Extract with 7z :
+    - Extract with 7z (download it... :p) :
         7z x Box2d_v2.3.0.7z -o box2d
-    - Configure with cmake (replace "Unix Makefiles" by the IDE you are using)
-        cmake . -G "Unix Makefiles"
-        cmake for help (check the bottom list)
-    - Set the BOX2D_BUILD_EXAMPLES (CMakeCache.txt) variable to OFF, we don't need it
+    - Configure with cmake
+        cmake .
+        cmake --help (check the bottom list if you use an IDE)
     - Build the library
         make
     - Installing on your computer
         make install
     - copy the PIRATES/doc/box2d.pc to /usr/lib/pkgconfig/
         cd PIRATES/
-        cp doc/box2d.pc /usr/lib/pkgconfig/
+        cp pkg-config/box2d.pc /usr/lib/pkgconfig/
 
 4. install TMXLib :
     - Download and install boost library
     - copy the pkgconfig file :
-        cp doc/boost.pc /usr/lib/pkgconfig/
+        cp pkg-config/boost.pc /usr/lib/pkgconfig/
     - Download the git repository :
         git clone http://github.com/aquemy/TMXLib
     - Build the library :
@@ -46,22 +45,27 @@ Developper install
     - Install in your system
         make install
     - copy the pkgconfig file :
-        cp doc/libtmx.pc /usr/lib/pkgconfig/
+        cp pkg-config/libtmx.pc /usr/lib/pkgconfig/
 
 5. install Thor library :
     - git clone http://github.com/Bromeon/Thor
-    - cp doc/thor.pc /usr/lib/pkgconfig/
-    - cd Thor; make . -G "Unix Makefiles"; make; make install
+    - cp pkg-config/thor.pc /usr/lib/pkgconfig/
+    - cd Thor; make . ; make; make install
     If you have a problem a the execution of client, you have to do this :
         echo "/usr/local/lib" > /etc/ld.so.conf.d/locale.conf; ldconfig
+    If -ltmx not found, you have to :
+        ln -s /usr/local/lib32(ou 64)/libtmx.a /usr/local/lib
 
 5. Configure
+    - mkdir build; cd build
     - use cmake with your IDE type as argument
-        cmake . -G "Unix Makefiles"
+        cmake .. -G "Unix Makefiles"
+        /!\ it's `cmake ..` not `cmake .` don't compile in the root directory for keep a clean repository
     - if you have pkgconfig error, then you have not install correctly libraries
 
 6. Compile
     - make server or make client or just make for both
+    - make doc to build a html and latex doxygen documentation of the project :)
 
 
 Install
@@ -75,10 +79,7 @@ Go to the game's folder and type:
     
 ### Linux ###
 
-    make        # build the game
-    make clean  # delete the temporary dev files
-    bin/pirates # run the game
-
+    // Not implemented yet
 Enjoy !
 
 

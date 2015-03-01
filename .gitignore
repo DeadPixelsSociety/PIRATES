@@ -1,10 +1,5 @@
-CMakeFiles/
-bin/
+build/
 
-CMakeCache.txt
-Makefile
-
-*.cmake
 *.so*
 *.a*
 

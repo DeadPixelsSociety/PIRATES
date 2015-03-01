@@ -1,21 +1,15 @@
-//
-//  @ Project :   PIRATES
-//  @ File Name : CServer.cpp
-//  @ Date :      20/10/2014
-//  @ Author :    Romain
-//
-
-
 #include <server/CServer.h>
 
 
+unsigned short  tcpPort = 56747;
+unsigned short  udpPort = 56748;
+unsigned short  udpPortClient = 56749;
+
+
 CServer::CServer(int nbMaxPlayers) :
-m_iNbMaxPlayers(nbMaxPlayers),
+m_nbMaxPlayers(nbMaxPlayers),
 m_threadLoopSocket(&CServer::loopSocket, this),
-m_mutex(),
-m_worldMap(),
 m_worldBox("../asset/maps/collision.tmx"),
-m_vClients(),
 m_running(true)
 {
   m_threadLoopSocket.launch();
@@ -24,100 +18,106 @@ m_running(true)
 CServer::~CServer()
 {
     m_running = false;
+    for (auto client : m_mClients)
+    {
+        client.second->socket.unbind();
+        delete client.second;
+    }
     m_threadLoopSocket.wait();
-    for (std::vector<SClient>::iterator it = m_vClients.begin(); it != m_vClients.end(); it++)
-        delete it->pSocket;
 }
 
 void  CServer::loopSocket()
 {
     sf::TcpListener     listener;
-    sf::TcpSocket       client;
+    sf::TcpSocket       tcpClient;
     sf::SocketSelector  socketSelector;
-    unsigned short      port = SERVER_PORT;
+    sf::Clock           phase;
     CMapQuery           mapQuery;
-    int                 iNbPlayers = 0;
+    int                 nbPlayers = 0;
 
-    if (listener.listen(SERVER_PORT) != sf::Socket::Done)
-        std::cerr << "Error during listening at " << SERVER_PORT;
-
+    listener.listen(tcpPort);
+    listener.setBlocking(false);
     while (m_running)
     {
-        if (iNbPlayers < m_iNbMaxPlayers)
+        if (nbPlayers < m_nbMaxPlayers)
         {
-            if (listener.accept(client) == sf::Socket::Done)
+            if (listener.accept(tcpClient) == sf::Socket::Done)
             {
-                listener.setBlocking(false);
-                port++;
-                m_vClients.push_back(SClient());
-                m_vClients.back().ip = client.getRemoteAddress();
-                m_vClients.back().pSocket = new sf::UdpSocket();
-                m_vClients.back().pSocket->bind(port);
-                socketSelector.add(*(m_vClients.back().pSocket));
+                m_mClients[nbPlayers] = new SClient();
+                m_mClients[nbPlayers]->ip = tcpClient.getRemoteAddress();
+                m_mClients[nbPlayers]->socket.bind(udpPort);
+                socketSelector.add(m_mClients[nbPlayers]->socket);
 
                 mapQuery.clear();
-                mapQuery << port << iNbPlayers;
-                client.send(mapQuery);
+                mapQuery << nbPlayers;
+                tcpClient.send(mapQuery);
 
                 mapQuery.clear();
-                client.receive(mapQuery);
-                mapQuery >> m_vClients.back().port;
+                for (int i = 0; i < nbPlayers; i++)
+                    mapQuery << NWorldMap::Add << NWorldMap::Player << i << "Player " + std::to_string(i);
+                tcpClient.send(mapQuery);
+                tcpClient.disconnect();
 
                 mapQuery.clear();
-                for (int i = 0; i < iNbPlayers; i++)
-                    mapQuery << NWorldMap::Add << NWorldMap::Player << i << sf::Vector2f(0, 0) << "Player " + std::to_string(i);
-                client.send(mapQuery);
-                client.disconnect();
-
-                mapQuery.clear();
-                mapQuery << NWorldMap::Add << NWorldMap::Player << iNbPlayers << sf::Vector2f(0, 0) << "Player " + std::to_string(iNbPlayers);
-                for (std::vector<SClient>::iterator it = m_vClients.begin(); it != m_vClients.end(); it++)
-                    it->pSocket->send(mapQuery, it->ip, it->port);
+                mapQuery << NWorldMap::Add << NWorldMap::Player << nbPlayers << "Player " + std::to_string(nbPlayers);
+                sendClients(mapQuery);
                 m_worldMap.update(mapQuery);
 
-                iNbPlayers++;
+                nbPlayers++;
             }
         }
-
         if (socketSelector.wait())
         {
-            for (std::vector<SClient>::iterator it = m_vClients.begin(); it != m_vClients.end(); it++)
+            for (auto client : m_mClients)
             {
-                if (socketSelector.isReady(*(it->pSocket)))
+                if (socketSelector.isReady(client.second->socket))
                 {
                     mapQuery.clear();
-                    if (it->pSocket->receive(mapQuery, it->ip, it->port) == sf::Socket::Done)
+                    if (client.second->socket.receive(mapQuery, client.second->ip, udpPortClient) == sf::Socket::Done)
                     {
-                        m_mutex.lock();
                         m_worldMap.update(mapQuery);
-                        m_mutex.unlock();
+                        client.second->ping.restart();
                     }
                 }
             }
         }
-
-        sf::sleep(sf::milliseconds(20));
+        for (auto client : m_mClients)
+        {
+            if (client.second->ping.getElapsedTime() > sf::seconds(PING_TIMEOUT))
+                deleteClient(client.first);
+        }
+        sf::sleep(sf::milliseconds(PERIOD) - phase.restart());
     }
 }
 
-void  CServer::loopGame()
+void    CServer::loopGame()
 {
-    sf::Clock   clock;
+    sf::Clock   phase;
     CMapQuery   mapQuery;
 
     while (m_running)
     {
-        sf::Time elapsed = clock.restart();
         mapQuery.clear();
-        m_mutex.lock();
-        mapQuery = m_worldBox.update(m_worldMap.getVObjects(), elapsed);
-        m_mutex.unlock();
-
-        for (std::vector<SClient>::iterator it = m_vClients.begin(); it != m_vClients.end(); it++)
-            it->pSocket->send(mapQuery, it->ip, it->port);
-
-        sf::sleep(sf::milliseconds(20));
+        mapQuery = m_worldBox.update(m_worldMap.getMObjects());
+        sendClients(mapQuery);
+        sf::sleep(sf::milliseconds(PERIOD) - phase.restart());
     }
 }
 
+void    CServer::sendClients(CMapQuery& mapQuery)
+{
+    for (auto client : m_mClients)
+        client.second->socket.send(mapQuery, client.second->ip, udpPortClient);
+}
+
+void    CServer::deleteClient(int id)
+{
+    CMapQuery   mapQuery;
+
+    m_mClients[id]->socket.unbind();
+    delete m_mClients[id];
+    m_mClients.erase(id);
+    mapQuery << NWorldMap::Delete << NWorldMap::Player << id;
+    sendClients(mapQuery);
+}
 
