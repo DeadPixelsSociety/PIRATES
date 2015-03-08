@@ -33,6 +33,7 @@
 
 #include <common/SFML.h>
 #include <common/CWorldMap.h>
+#include <common/CQuery.h>
 #include <client/CRenderWindow.h>
 #include <client/CController.h>
 

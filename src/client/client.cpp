@@ -26,7 +26,7 @@
 
 int main (int argc, char **argv)
 {
-	CClient client("Joueur Alpha");
+	CClient client;
 	client.loopGame();
 
     return 0;

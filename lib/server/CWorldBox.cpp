@@ -44,18 +44,13 @@ m_world(b2Vec2(0.f, 0.f))
     }
 }
 
-CWorldBox::~CWorldBox()
+CQuery  CWorldBox::update(CWorldMap& worldMap)
 {
-
-}
-
-CMapQuery  CWorldBox::update(CWorldMap& mObjects)
-{
-    m_mapQuery.clear();
+    CQuery  query;
     m_elapsed = m_clock.restart();
     m_world.Step(m_elapsed, 8, 3);
 
-    for (auto object : vObjects)
+    for (auto object : worldMap)
     {
         if (m_mBodyObjects.find(object->getId()) == m_mBodyObjects.end())
         {
@@ -74,7 +69,7 @@ CMapQuery  CWorldBox::update(CWorldMap& mObjects)
         update((CPlayer*)object);
     }
 
-    return m_mapQuery;
+    return query;
 }
 
 void    CWorldBox::update(CPlayer* player)

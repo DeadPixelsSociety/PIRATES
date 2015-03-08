@@ -10,7 +10,7 @@
 
 
 CPlayer::CPlayer(int id, sf::Vector2f position, std::string name) :
-CMapObject(id),
+CObject(id),
 CPositionable(position),
 m_sName(name),
 m_iState()
@@ -19,7 +19,7 @@ m_iState()
         m_iState[i] = 0;
 }
 
-int    CPlayer::update(CMapQuery &in)
+int    CPlayer::update(CQuery &in)
 {
     int i;
     while (in >> i)

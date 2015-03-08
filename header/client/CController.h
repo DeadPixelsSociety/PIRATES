@@ -4,13 +4,14 @@
 
 #include <common/SFML.h>
 #include <common/CWorldMap.h>
+#include <common/CQuery.h>
 #include <common/CPlayer.h>
 
 
 class CController
 {
     public :
-        static  void    getInput(CMapQuery& in);
+        static  void    getInput(CQuery& in);
 };
 
 

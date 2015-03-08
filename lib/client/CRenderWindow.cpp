@@ -27,7 +27,7 @@ void    CRenderWindow::update(CWorldMap& mObjects)
     {
         if (object.second->isVisible()
         && m_mRenders.find(object.first) == m_mRenders.end())
-            m_mRenders[object.first] == new CRenderPlayer(m_vTextures.back(), (CPlayer*)(object));
+            m_mRenders[object.first] = new CRenderPlayer(m_vTextures.back(), (CPlayer*)(object.second));
         else if (!object.second->isVisible()
         && m_mRenders.find(object.first) != m_mRenders.end())
                 m_mRenders.erase(object.first);

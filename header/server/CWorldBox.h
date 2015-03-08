@@ -13,8 +13,8 @@
 #include <Box2D/Box2D.h>
 #include <common/SFML.h>
 #include <common/TMX.h>
-#include <common/CMapObject.h>
-#include <common/CMapQuery.h>
+#include <common/CObject.h>
+#include <common/CQuery.h>
 #include <common/CPlayer.h>
 
 
@@ -29,15 +29,13 @@ class CWorldBox
 {
   public :
     CWorldBox(const std::string& tmxFile);
-    ~CWorldBox();
 
-    CMapQuery   update(std::vector<CMapObject*>& vObject);
+    CMapQuery   update(CWorldMap& worldMap);
     void        update(CPlayer* player);
 
 
   private :
     tmx::Map    m_map;
-    CMapQuery   m_mapQuery;
 
     sf::Clock   m_clock;
     sf::Time    m_elapsed;

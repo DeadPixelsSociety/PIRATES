@@ -31,7 +31,7 @@ unsigned short  tcpPort = 56747;
 unsigned short  udpPort = 56666;
 
 
-CClient::CClient(std::string name) :
+CClient::CClient() :
 m_running(true),
 m_window("PIRATES"),
 m_threadLoopSocket(&CClient::loopSocket, this)
@@ -76,7 +76,7 @@ void CClient::loopSocket()
         if (m_socket.receive(query, serverIp, udpPort) == sf::Socket::Done)
         {
             m_worldMap.update(query);
-            m_window.update(m_worldMap.getVObjects());
+            m_window.update(m_worldMap);
         }
     }
 }

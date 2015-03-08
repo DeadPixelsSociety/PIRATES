@@ -9,7 +9,7 @@
 #include <common/CWorldMap.h>
 
 
-int    CWorldMap::update(CMapQuery &in)
+int    CWorldMap::update(CQuery &in)
 {
     int i;
 
@@ -22,16 +22,18 @@ int    CWorldMap::update(CMapQuery &in)
                 switch(in.nextInt())
                 {
                     case NWorldMap::Player :
+                    {
                         int id = in.nextInt();
-                        insert(id, new CPlayer(id, in.nextVector2f(), in.nextString()));
+                        insert(std::pair<int, CPlayer*>(id, new CPlayer(id, in.nextVector2f(), in.nextString())));
                         break;
+                    }
                     default :
                         break;
                 }
                 break;
             }
             case NWorldMap::Delete :
-                erase(begin() + in.nextInt());
+                erase(in.nextInt());
                 break;
             case NWorldMap::Update :
                 i = at(in.nextInt())->update(in);

@@ -1,7 +1,7 @@
 #include <client/CController.h>
 
 
-void    CController::getInput(CMapQuery& in)
+void    CController::getInput(CQuery& in)
 {
     int i = 0;
 
