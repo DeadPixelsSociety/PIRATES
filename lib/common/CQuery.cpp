@@ -1,4 +1,4 @@
-#include <common/CMapQuery.h>
+#include <common/CQuery.h>
 
 
 sf::Packet& operator>>(sf::Packet& packet, sf::Vector2f& in)

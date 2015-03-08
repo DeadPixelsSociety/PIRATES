@@ -37,10 +37,13 @@
 #include <client/CController.h>
 
 
+#define PERIOD      20
+
+
 class CClient
 {
     public :
-        CClient(std::string name);
+        CClient();
         ~CClient();
 
         void    loopGame();
@@ -50,16 +53,12 @@ class CClient
         void    loopSocket();
         void    getEvent();
 
-        std::string         m_name;
-        int                 m_id;
-        bool                m_running;
-        CMapQuery           m_mapQuery;
-
-        CWorldMap           m_worldMap;
-        CRenderWindow       m_window;
-
-        sf::Thread          m_threadLoopSocket;
-        sf::UdpSocket       m_socket;
+        int             m_id;
+        bool            m_running;
+        CWorldMap       m_worldMap;
+        CRenderWindow   m_window;
+        sf::Thread      m_threadLoopSocket;
+        sf::UdpSocket   m_socket;
 };
 
 

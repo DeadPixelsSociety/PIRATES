@@ -9,18 +9,6 @@
 #include <common/CWorldMap.h>
 
 
-CWorldMap::CWorldMap() :
-m_vObjects()
-{
-
-}
-
-CWorldMap::~CWorldMap()
-{
-  for (std::vector<CMapObject*>::iterator it = m_vObjects.begin(); it != m_vObjects.end(); it++)
-    free(*it);
-}
-
 int    CWorldMap::update(CMapQuery &in)
 {
     int i;
@@ -34,7 +22,8 @@ int    CWorldMap::update(CMapQuery &in)
                 switch(in.nextInt())
                 {
                     case NWorldMap::Player :
-                        m_vObjects.push_back(new CPlayer(in.nextInt(), in.nextVector2f(), in.nextString()));
+                        int id = in.nextInt();
+                        insert(id, new CPlayer(id, in.nextVector2f(), in.nextString()));
                         break;
                     default :
                         break;
@@ -42,10 +31,10 @@ int    CWorldMap::update(CMapQuery &in)
                 break;
             }
             case NWorldMap::Delete :
-                m_vObjects.erase(m_vObjects.begin() + in.nextInt());
+                erase(begin() + in.nextInt());
                 break;
             case NWorldMap::Update :
-                i = m_vObjects[in.nextInt()]->update(in);
+                i = at(in.nextInt())->update(in);
                 break;
             default :
                 return i;

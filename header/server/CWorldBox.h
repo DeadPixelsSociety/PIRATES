@@ -31,7 +31,7 @@ class CWorldBox
     CWorldBox(const std::string& tmxFile);
     ~CWorldBox();
 
-    CMapQuery   update(std::vector<CMapObject*>& vObject, sf::Time elapsed);
+    CMapQuery   update(std::vector<CMapObject*>& vObject);
     void        update(CPlayer* player);
 
 
@@ -39,6 +39,7 @@ class CWorldBox
     tmx::Map    m_map;
     CMapQuery   m_mapQuery;
 
+    sf::Clock   m_clock;
     sf::Time    m_elapsed;
 
     b2World   m_world;

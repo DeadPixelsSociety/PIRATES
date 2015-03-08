@@ -32,7 +32,7 @@ void  CServer::loopSocket()
     sf::TcpSocket       tcpClient;
     sf::SocketSelector  socketSelector;
     sf::Clock           phase;
-    CMapQuery           mapQuery;
+    CQuery              query;
     int                 nbPlayers = 0;
 
     listener.listen(tcpPort);
@@ -48,20 +48,20 @@ void  CServer::loopSocket()
                 m_mClients[nbPlayers]->socket.bind(udpPort);
                 socketSelector.add(m_mClients[nbPlayers]->socket);
 
-                mapQuery.clear();
-                mapQuery << nbPlayers;
-                tcpClient.send(mapQuery);
+                query.clear();
+                query << nbPlayers;
+                tcpClient.send(query);
 
-                mapQuery.clear();
+                query.clear();
                 for (int i = 0; i < nbPlayers; i++)
-                    mapQuery << NWorldMap::Add << NWorldMap::Player << i << "Player " + std::to_string(i);
-                tcpClient.send(mapQuery);
+                    query << NWorldMap::Add << NWorldMap::Player << i << "Player " + std::to_string(i);
+                tcpClient.send(query);
                 tcpClient.disconnect();
 
-                mapQuery.clear();
-                mapQuery << NWorldMap::Add << NWorldMap::Player << nbPlayers << "Player " + std::to_string(nbPlayers);
-                sendClients(mapQuery);
-                m_worldMap.update(mapQuery);
+                query.clear();
+                query << NWorldMap::Add << NWorldMap::Player << nbPlayers << "Player " + std::to_string(nbPlayers);
+                sendClients(query);
+                m_worldMap.update(query);
 
                 nbPlayers++;
             }
@@ -72,10 +72,10 @@ void  CServer::loopSocket()
             {
                 if (socketSelector.isReady(client.second->socket))
                 {
-                    mapQuery.clear();
-                    if (client.second->socket.receive(mapQuery, client.second->ip, udpPortClient) == sf::Socket::Done)
+                    query.clear();
+                    if (client.second->socket.receive(query, client.second->ip, udpPortClient) == sf::Socket::Done)
                     {
-                        m_worldMap.update(mapQuery);
+                        m_worldMap.update(query);
                         client.second->ping.restart();
                     }
                 }
@@ -93,31 +93,31 @@ void  CServer::loopSocket()
 void    CServer::loopGame()
 {
     sf::Clock   phase;
-    CMapQuery   mapQuery;
+    CQuery      query;
 
     while (m_running)
     {
-        mapQuery.clear();
-        mapQuery = m_worldBox.update(m_worldMap.getMObjects());
-        sendClients(mapQuery);
+        query.clear();
+        query = m_worldBox.update(m_worldMap.getMObjects());
+        sendClients(query);
         sf::sleep(sf::milliseconds(PERIOD) - phase.restart());
     }
 }
 
-void    CServer::sendClients(CMapQuery& mapQuery)
+void    CServer::sendClients(CQuery& query)
 {
     for (auto client : m_mClients)
-        client.second->socket.send(mapQuery, client.second->ip, udpPortClient);
+        client.second->socket.send(query, client.second->ip, udpPortClient);
 }
 
 void    CServer::deleteClient(int id)
 {
-    CMapQuery   mapQuery;
+    CQuery   query;
 
     m_mClients[id]->socket.unbind();
     delete m_mClients[id];
     m_mClients.erase(id);
-    mapQuery << NWorldMap::Delete << NWorldMap::Player << id;
-    sendClients(mapQuery);
+    query << NWorldMap::Delete << NWorldMap::Player << id;
+    sendClients(query);
 }
 

@@ -6,7 +6,7 @@
 
 #include <common/SFML.h>
 #include <client/CTileMap.h>
-#include <common/CMapObject.h>
+#include <common/CObject.h>
 #include <client/CRender.h>
 
 
@@ -19,7 +19,7 @@ class CRenderWindow : public sf::RenderWindow
                 CRenderWindow(std::string name);
                 ~CRenderWindow();
 
-        void    update(std::vector<CMapObject*>& in);
+        void    update(CWorldMap& in);
         void    render();
 
     private :

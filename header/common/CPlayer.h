@@ -16,7 +16,8 @@
 #include <common/SFML.h>
 #include <common/CWorldMap.h>
 #include <common/CPositionable.h>
-#include <common/CMapObject.h>
+#include <common/CObject.h>
+#include <common/CQuery.h>
 
 
 namespace NPlayer
@@ -49,14 +50,14 @@ namespace NPlayer
 }
 
 
-class CMapQuery;
+class CQuery;
 
-class CPlayer : public CMapObject, public CPositionable
+class CPlayer : public CObject, public CPositionable
 {
   public :
     CPlayer(int id, sf::Vector2f position, std::string name);
 
-    int    update(CMapQuery &in);
+    int    update(CQuery &in);
 
     inline  std::string getName()    {return m_sName;}
     inline  int         getState(int i) {return m_iState[i];}

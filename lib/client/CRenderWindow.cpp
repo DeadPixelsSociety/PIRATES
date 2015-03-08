@@ -15,31 +15,33 @@ m_mRenders()
 
 CRenderWindow::~CRenderWindow()
 {
-    for (std::map<int, CRender*>::iterator it = m_mRenders.begin(); it != m_mRenders.end(); it++)
-        delete it->second;
-
-    for (std::vector<sf::Texture*>::iterator it = m_vTextures.begin(); it != m_vTextures.end(); it++)
-        delete (*it);
+    for (auto render : m_mRenders)
+        delete render.second;
+    for (auto texture : m_vTextures)
+        delete texture;
 }
 
-void    CRenderWindow::update(std::vector<CMapObject*>& vObjects)
+void    CRenderWindow::update(CWorldMap& mObjects)
 {
-    for (std::vector<CMapObject*>::iterator it = vObjects.begin(); it != vObjects.end(); it++)
+    for (auto object : mObjects)
     {
-        if (m_mRenders.find((*it)->getId()) == m_mRenders.end())
-            m_mRenders[(*it)->getId()] = new CRenderPlayer(m_vTextures.back(), (CPlayer*)(*it));
+        if (object.second->isVisible()
+        && m_mRenders.find(object.first) == m_mRenders.end())
+            m_mRenders[object.first] == new CRenderPlayer(m_vTextures.back(), (CPlayer*)(object));
+        else if (!object.second->isVisible()
+        && m_mRenders.find(object.first) != m_mRenders.end())
+                m_mRenders.erase(object.first);
     }
-
-    for (std::map<int, CRender*>::iterator it = m_mRenders.begin(); it != m_mRenders.end(); it++)
-        it->second->update();
+    for (auto render : m_mRenders)
+        render.second->update();
 }
 
 void    CRenderWindow::render()
 {
     clear(sf::Color::White);
     draw(m_tileMap);
-    for (std::map<int, CRender*>::iterator it = m_mRenders.begin(); it != m_mRenders.end(); it++)
-        it->second->render(this);
+    for (auto render : m_mRenders)
+        render.second->render(this);
     display();
 }
 

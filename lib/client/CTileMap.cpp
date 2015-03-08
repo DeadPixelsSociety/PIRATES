@@ -12,7 +12,7 @@ m_tileset()
 
     for (auto layer : m_map.getLayers())
     {
-        m_vVertices.push_back(sf::VertexArray());
+        m_vVertices.push_back(sf::VertexArray(sf::Quads));
         m_vVertices.back().setPrimitiveType(sf::Quads);
 
         int tw = m_map.getTilewidth(), th = m_map.getTileheight();

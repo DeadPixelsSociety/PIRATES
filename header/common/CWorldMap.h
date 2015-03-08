@@ -15,7 +15,7 @@
 
 #include <common/SFML.h>
 #include <common/CPlayer.h>
-#include <common/CMapQuery.h>
+#include <common/CQuery.h>
 
 
 namespace NWorldMap
@@ -37,18 +37,11 @@ namespace NWorldMap
 class CMapObject;
 
 
-class CWorldMap
+class CWorldMap : public std::map<int, CMapObject*>
 {
     public :
-        CWorldMap();
-        ~CWorldMap();
-
-        int     update(CMapQuery &in);
-        inline  CMapObject*    getObject(int id)   {return m_vObjects[id];}
-        inline  std::vector<CMapObject*>&   getVObjects()  {return m_vObjects;}
-
-    private :
-        std::vector<CMapObject*> m_vObjects;
+        int                 update(CMapQuery &in);
+        inline CMapObject*  getObject(int id)       {return at(id);}
 };
 
 

@@ -32,14 +32,9 @@ unsigned short  udpPort = 56666;
 
 
 CClient::CClient(std::string name) :
-m_name(name),
-m_id(),
 m_running(true),
-m_mapQuery(),
-m_worldMap(),
-m_window(m_name),
-m_threadLoopSocket(&CClient::loopSocket, this),
-m_socket()
+m_window("PIRATES"),
+m_threadLoopSocket(&CClient::loopSocket, this)
 {
     connectServer();
     m_threadLoopSocket.launch();
@@ -53,34 +48,34 @@ CClient::~CClient()
 void CClient::connectServer()
 {
     sf::TcpSocket   tcpSocket;
-    CMapQuery       mapQuery;
+    CQuery          query;
 
     if (tcpSocket.connect(serverIp, tcpPort) == sf::Socket::Done
-        && tcpSocket.receive(mapQuery) == sf::Socket::Done)
+        && tcpSocket.receive(query) == sf::Socket::Done)
     {
-        mapQuery >> m_id;
+        query >> m_id;
         m_socket.bind(udpPort);
 
-        mapQuery.clear();
-        tcpSocket.receive(mapQuery);
-        m_worldMap.update(mapQuery);
+        query.clear();
+        tcpSocket.receive(query);
+        m_worldMap.update(query);
 
-        mapQuery.clear();
-        m_socket.receive(mapQuery, serverIp, udpPort);
-        m_worldMap.update(mapQuery);
+        query.clear();
+        m_socket.receive(query, serverIp, udpPort);
+        m_worldMap.update(query);
     }
 }
 
 void CClient::loopSocket()
 {
-    CMapQuery       mapQuery;
+    CQuery       query;
 
     while (m_running)
     {
-        mapQuery.clear();
-        if (m_socket.receive(mapQuery, serverIp, udpPort) == sf::Socket::Done)
+        query.clear();
+        if (m_socket.receive(query, serverIp, udpPort) == sf::Socket::Done)
         {
-            m_worldMap.update(mapQuery);
+            m_worldMap.update(query);
             m_window.update(m_worldMap.getVObjects());
         }
     }
@@ -88,21 +83,21 @@ void CClient::loopSocket()
 
 void CClient::loopGame()
 {
+    CQuery      query;
+    sf::Clock   phase;
+
     while (m_running)
     {
         getEvent();
         if (!m_window.isOpen())
             m_running = false;
-
-        m_mapQuery.clear();
-        m_mapQuery << NWorldMap::Update << m_id;
-        CController::getInput(m_mapQuery);
-
-        m_socket.send(m_mapQuery, serverIp, udpPort);
-        m_worldMap.update(m_mapQuery);
-
+        query.clear();
+        query << NWorldMap::Update << m_id;
+        CController::getInput(query);
+        m_socket.send(query, serverIp, udpPort);
+        m_worldMap.update(query);
         m_window.render();
-        sf::sleep(sf::milliseconds(20));
+        sf::sleep(sf::milliseconds(PERIOD) - phase.restart());
     }
 }
 

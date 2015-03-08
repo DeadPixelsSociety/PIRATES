@@ -49,11 +49,11 @@ CWorldBox::~CWorldBox()
 
 }
 
-CMapQuery  CWorldBox::update(std::vector<CMapObject*>& vObjects, sf::Time elapsed)
+CMapQuery  CWorldBox::update(CWorldMap& mObjects)
 {
     m_mapQuery.clear();
-    m_elapsed = elapsed;
-    m_world.Step(1/60.f, 8, 3);
+    m_elapsed = m_clock.restart();
+    m_world.Step(m_elapsed, 8, 3);
 
     for (auto object : vObjects)
     {
